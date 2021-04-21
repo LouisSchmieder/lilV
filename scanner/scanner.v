@@ -264,8 +264,30 @@ fn (mut s Scanner) next(app bool) (byte, bool) {
 		} else {	
 			s.lit[0] = b
 		}
-		s.pos += s.next_i()
-		s.char_nr++
+		s.pos++
+		mut nl := false
+		for {
+			if s.pos >= s.data.len {
+				break
+			}
+			if nl {
+				s.char_nr = 0
+				nl = false
+			}
+			if s.data[s.pos] == ` ` || s.data[s.pos] == `\t` {
+				s.pos++
+				s.char_nr++
+				continue
+			} else if s.data[s.pos] == `\n` {
+				s.pos++
+				s.line_nr++
+				s.char_nr++
+				nl = true
+				continue
+			} else {
+				break
+			}
+		}
 	}
 	return b, ba
 }
@@ -281,20 +303,6 @@ fn (mut s Scanner) th_next() byte {
 
 fn (mut s Scanner) validate(c byte) bool {
 	return c == ` ` || c == `\t` || c == `\n` || c == `\r`
-}
-
-// calculates the addition to index
-fn (mut s Scanner) next_i() int {
-	mut i := 1
-	if s.pos + i >= s.data.len {
-		return 1
-	}
-	mut c := s.data[s.pos + i]
-	for s.validate(c) && (s.pos + i < s.data.len) {
-		i++
-		c = s.data[s.pos + i]
-	}
-	return i
 }
 
 fn (mut s Scanner) is_number(b byte) bool {
