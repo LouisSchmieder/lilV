@@ -18,11 +18,11 @@ fn (mut p Parser) function() ast.FunctionStmt {
 
 	mut stmts := []ast.Stmt{}
 
-	for {
+	/*for {
 		stmts << p.parse_stmt() or {
 			break
 		}
-	}
+	}`*/
 
 	p.next()
 	p.expect(.rcbr)

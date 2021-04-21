@@ -25,106 +25,107 @@ pub fn create_scanner(input string, filename string) &Scanner {
 
 pub fn (mut s Scanner) scan() token.Token {
 	s.lit = []byte{len: 1}
+	char_nr := s.char_nr
+	line_nr := s.line_nr
 	mut c, _ := s.next(false)
 
 	if c == 0 {
-		return token.create_token(.eof, s.filename, s.line_nr, s.char_nr, s.lit)
+		return token.create_token(.eof, s.filename, line_nr, s.char_nr, s.lit)
 	}
-	char_nr := s.char_nr
 	match c {
 		`+` {
 			if c == s.th_next() {
 				s.next(true)
-				return token.create_token(.inc, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.inc, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.plus_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.plus_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.plus, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.plus, s.filename, line_nr, char_nr, s.lit)
 		}
 		`-` {
 			if c == s.th_next() {
 				s.next(true)
-				return token.create_token(.dec, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.dec, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.plus_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.plus_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.minus, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.minus, s.filename, line_nr, char_nr, s.lit)
 		}
 		`*` {
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.mult_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.mult_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.mul, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.mul, s.filename, line_nr, char_nr, s.lit)
 		}
 		`/` {
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.div_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.div_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.div, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.div, s.filename, line_nr, char_nr, s.lit)
 		}
 		`%` {
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.mod_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.mod_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.mod, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.mod, s.filename, line_nr, char_nr, s.lit)
 		}
 		`^` {
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.xor_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.xor_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.xor, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.xor, s.filename, line_nr, char_nr, s.lit)
 		}
 		`|` {
 			if c == s.th_next() {
 				s.next(true)
-				return token.create_token(.logical_or, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.logical_or, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.or_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.or_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.pipe, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.pipe, s.filename, line_nr, char_nr, s.lit)
 		}
 		`&` {
 			if c == s.th_next() {
 				s.next(true)
-				return token.create_token(.and, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.and, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.and_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.and_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.amp, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.amp, s.filename, line_nr, char_nr, s.lit)
 		}
 		`:` {
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.decl_assign, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.decl_assign, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.colon, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.colon, s.filename, line_nr, char_nr, s.lit)
 		}
 		`!` {
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.ne, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.ne, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `i` {
 				s.next(true)
 				if s.th_next() == `s` {
-					return token.create_token(.not_is, s.filename, s.line_nr, char_nr, s.lit)
+					return token.create_token(.not_is, s.filename, line_nr, char_nr, s.lit)
 				} else if s.th_next() == `n` {
-					return token.create_token(.not_in, s.filename, s.line_nr, char_nr, s.lit)
+					return token.create_token(.not_in, s.filename, line_nr, char_nr, s.lit)
 				}
 			}
-			return token.create_token(.not, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.not, s.filename, line_nr, char_nr, s.lit)
 		}
 		`'`, `"` {
 			ch := c
@@ -134,103 +135,103 @@ pub fn (mut s Scanner) scan() token.Token {
 					break
 				}
 			}
-			return token.create_token(.string, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.string, s.filename, line_nr, char_nr, s.lit)
 		}
 		`=` {
 			if c == s.th_next() {
-				return token.create_token(.eq, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.eq, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.assign, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.assign, s.filename, line_nr, char_nr, s.lit)
 		}
 		`>` {
 			if s.th_next() == c {
 				s.next(true)
 				if s.th_next() == `=` {
 					s.next(true)
-					return token.create_token(.right_shift_assign, s.filename, s.line_nr, char_nr, s.lit)
+					return token.create_token(.right_shift_assign, s.filename, line_nr, char_nr, s.lit)
 				}
-				return token.create_token(.right_shift, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.right_shift, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `=` {
-				return token.create_token(.ge, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.ge, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.gt, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.gt, s.filename, line_nr, char_nr, s.lit)
 		}
 		`<` {
 			if s.th_next() == c {
 				s.next(true)
 				if s.th_next() == `=` {
 					s.next(true)
-					return token.create_token(.left_shift_assign, s.filename, s.line_nr, char_nr, s.lit)
+					return token.create_token(.left_shift_assign, s.filename, line_nr, char_nr, s.lit)
 				}
-				return token.create_token(.left_shift, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.left_shift, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `=` {
 				s.next(true)
-				return token.create_token(.le, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.le, s.filename, line_nr, char_nr, s.lit)
 			}
 			if s.th_next() == `-` {
 				s.next(true)
-				return token.create_token(.arrow, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.arrow, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.lt, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.lt, s.filename, line_nr, char_nr, s.lit)
 		}
 		`~` {
-			return token.create_token(.bit_not, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.bit_not, s.filename, line_nr, char_nr, s.lit)
 		}
 		`?` {
-			return token.create_token(.question, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.question, s.filename, line_nr, char_nr, s.lit)
 		}
 		`,` {
-			return token.create_token(.comma, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.comma, s.filename, line_nr, char_nr, s.lit)
 		}
 		`;` {
-			return token.create_token(.semicolon, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.semicolon, s.filename, line_nr, char_nr, s.lit)
 		}
 		`#` {
-			return token.create_token(.hash, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.hash, s.filename, line_nr, char_nr, s.lit)
 		}
 		`$` {
-			return token.create_token(.dollar, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.dollar, s.filename, line_nr, char_nr, s.lit)
 		}
 		`@` {
-			return token.create_token(.at, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.at, s.filename, line_nr, char_nr, s.lit)
 		}
 		`{` {
-			return token.create_token(.lcbr, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.lcbr, s.filename, line_nr, char_nr, s.lit)
 		}
 		`(` {
-			return token.create_token(.lpar, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.lpar, s.filename, line_nr, char_nr, s.lit)
 		}
 		`[` {
-			return token.create_token(.lsbr, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.lsbr, s.filename, line_nr, char_nr, s.lit)
 		}
 		`}` {
-			return token.create_token(.rcbr, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.rcbr, s.filename, line_nr, char_nr, s.lit)
 		}
 		`)` {
-			return token.create_token(.rpar, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.rpar, s.filename, line_nr, char_nr, s.lit)
 		}
 		`]` {
-			return token.create_token(.rsbr, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.rsbr, s.filename, line_nr, char_nr, s.lit)
 		}
 		`.` {
 			if s.th_next() == c {
 				s.next(true)
 				if s.th_next() == c {
 					s.next(true)
-					return token.create_token(.ellipsis, s.filename, s.line_nr, char_nr, s.lit)
+					return token.create_token(.ellipsis, s.filename, line_nr, char_nr, s.lit)
 				}
-				return token.create_token(.dotdot, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.dotdot, s.filename, line_nr, char_nr, s.lit)
 			}
-			return token.create_token(.dot, s.filename, s.line_nr, char_nr, s.lit)
+			return token.create_token(.dot, s.filename, line_nr, char_nr, s.lit)
 		}
 		else {
 			if s.is_number(c) {
 				for s.is_number(s.th_next()) {
 					s.next(true)
 				}
-				return token.create_token(.number, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.number, s.filename, line_nr, char_nr, s.lit)
 			} else if s.is_name(c) {
 				for s.is_name(s.th_next()) {
 					_, e := s.next(true)
@@ -239,13 +240,13 @@ pub fn (mut s Scanner) scan() token.Token {
 					}
 				}
 				if string(s.lit) in token.keywords {
-					return token.create_token(token.keywords[string(s.lit)], s.filename, s.line_nr, char_nr, s.lit)
+					return token.create_token(token.keywords[string(s.lit)], s.filename, line_nr, char_nr, s.lit)
 				}
-				return token.create_token(.name, s.filename, s.line_nr, char_nr, s.lit)
+				return token.create_token(.name, s.filename, line_nr, char_nr, s.lit)
 			}
 		}
 	}
-	return token.create_token(.unknown, s.filename, s.line_nr, char_nr, s.lit)
+	return token.create_token(.unknown, s.filename, line_nr, char_nr, s.lit)
 }
 
 // gets the next byte in string and increases values
@@ -265,14 +266,10 @@ fn (mut s Scanner) next(app bool) (byte, bool) {
 			s.lit[0] = b
 		}
 		s.pos++
-		mut nl := false
+		s.char_nr++
 		for {
 			if s.pos >= s.data.len {
 				break
-			}
-			if nl {
-				s.char_nr = 0
-				nl = false
 			}
 			if s.data[s.pos] == ` ` || s.data[s.pos] == `\t` {
 				s.pos++
@@ -281,8 +278,7 @@ fn (mut s Scanner) next(app bool) (byte, bool) {
 			} else if s.data[s.pos] == `\n` {
 				s.pos++
 				s.line_nr++
-				s.char_nr++
-				nl = true
+				s.char_nr = 0
 				continue
 			} else {
 				break
