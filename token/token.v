@@ -10,48 +10,48 @@ pub:
 pub enum Kind {
 	unknown
 	eof
-	name // user
-	number // 123
-	string // 'foo'
+	name
+	number
+	string
 	str_inter // 'name=$user.name'
 	chartoken // `A` - rune
-	plus // +
-	minus // -
-	mul // *
-	div // /
-	mod // %
-	xor // ^
-	pipe // |
-	inc // ++
-	dec // --
-	and // &&
-	logical_or // ||
-	not // !
+	plus
+	minus
+	mul
+	div
+	mod
+	xor
+	pipe
+	inc
+	dec
+	and
+	logical_or
+	not
 	bit_not // ~
 	question // ?
 	comma // ,
 	semicolon // ;
-	colon // :
+	colon
 	arrow // <-
-	amp // &
+	amp
 	hash // #
 	dollar // $
 	at // @
 	str_dollar
 	left_shift // <<
 	right_shift // >>
-	not_in // !in
-	not_is // !is
-	assign // =
-	decl_assign // :=
-	plus_assign // +=
-	minus_assign // -=
-	div_assign // /=
-	mult_assign // *=
-	xor_assign // ^=
-	mod_assign // %=
-	or_assign // |=
-	and_assign // &=
+	not_in
+	not_is
+	assign
+	decl_assign
+	plus_assign
+	minus_assign
+	div_assign
+	mult_assign
+	xor_assign
+	mod_assign
+	or_assign
+	and_assign
 	right_shift_assign // <<=
 	left_shift_assign // >>=
 	lcbr // {
@@ -60,8 +60,8 @@ pub enum Kind {
 	rpar // )
 	lsbr // [
 	rsbr // ]
-	eq // ==
-	ne // !=
+	eq
+	ne
 	gt // >
 	lt // <
 	ge // >=
