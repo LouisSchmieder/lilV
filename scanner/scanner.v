@@ -25,7 +25,7 @@ pub fn create_scanner(input string, filename string) &Scanner {
 
 pub fn (mut s Scanner) scan() token.Token {
 	s.lit = []byte{len: 1}
-	mut c := s.next(false)
+	mut c, _ := s.next(false)
 
 	if c == 0 {
 		return token.create_token(.eof, s.filename, s.line_nr, s.char_nr, s.lit)
@@ -129,7 +129,7 @@ pub fn (mut s Scanner) scan() token.Token {
 		`'`, `"` {
 			ch := c
 			for {
-				c = s.next(true)
+				c, _ = s.next(true)
 				if c == ch {
 					break
 				}
@@ -142,6 +142,89 @@ pub fn (mut s Scanner) scan() token.Token {
 			}
 			return token.create_token(.assign, s.filename, s.line_nr, char_nr, s.lit)
 		}
+		`>` {
+			if s.th_next() == c {
+				s.next(true)
+				if s.th_next() == `=` {
+					s.next(true)
+					return token.create_token(.right_shift_assign, s.filename, s.line_nr, char_nr, s.lit)
+				}
+				return token.create_token(.right_shift, s.filename, s.line_nr, char_nr, s.lit)
+			}
+			if s.th_next() == `=` {
+				return token.create_token(.ge, s.filename, s.line_nr, char_nr, s.lit)
+			}
+			return token.create_token(.gt, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`<` {
+			if s.th_next() == c {
+				s.next(true)
+				if s.th_next() == `=` {
+					s.next(true)
+					return token.create_token(.left_shift_assign, s.filename, s.line_nr, char_nr, s.lit)
+				}
+				return token.create_token(.left_shift, s.filename, s.line_nr, char_nr, s.lit)
+			}
+			if s.th_next() == `=` {
+				s.next(true)
+				return token.create_token(.le, s.filename, s.line_nr, char_nr, s.lit)
+			}
+			if s.th_next() == `-` {
+				s.next(true)
+				return token.create_token(.arrow, s.filename, s.line_nr, char_nr, s.lit)
+			}
+			return token.create_token(.lt, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`~` {
+			return token.create_token(.bit_not, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`?` {
+			return token.create_token(.question, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`,` {
+			return token.create_token(.comma, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`;` {
+			return token.create_token(.semicolon, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`#` {
+			return token.create_token(.hash, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`$` {
+			return token.create_token(.dollar, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`@` {
+			return token.create_token(.at, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`{` {
+			return token.create_token(.lcbr, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`(` {
+			return token.create_token(.lpar, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`[` {
+			return token.create_token(.lsbr, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`}` {
+			return token.create_token(.rcbr, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`)` {
+			return token.create_token(.rpar, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`]` {
+			return token.create_token(.rsbr, s.filename, s.line_nr, char_nr, s.lit)
+		}
+		`.` {
+			if s.th_next() == c {
+				s.next(true)
+				if s.th_next() == c {
+					s.next(true)
+					return token.create_token(.ellipsis, s.filename, s.line_nr, char_nr, s.lit)
+				}
+				return token.create_token(.dotdot, s.filename, s.line_nr, char_nr, s.lit)
+			}
+			return token.create_token(.dot, s.filename, s.line_nr, char_nr, s.lit)
+		}
 		else {
 			if s.is_number(c) {
 				for s.is_number(s.th_next()) {
@@ -149,7 +232,15 @@ pub fn (mut s Scanner) scan() token.Token {
 				}
 				return token.create_token(.number, s.filename, s.line_nr, char_nr, s.lit)
 			} else if s.is_name(c) {
-				s.get_name()
+				for s.is_name(s.th_next()) {
+					_, e := s.next(true)
+					if e {
+						break
+					}
+				}
+				if string(s.lit) in token.keywords {
+					return token.create_token(token.keywords[string(s.lit)], s.filename, s.line_nr, char_nr, s.lit)
+				}
 				return token.create_token(.name, s.filename, s.line_nr, char_nr, s.lit)
 			}
 		}
@@ -157,17 +248,17 @@ pub fn (mut s Scanner) scan() token.Token {
 	return token.create_token(.unknown, s.filename, s.line_nr, char_nr, s.lit)
 }
 
-fn (mut s Scanner) get_name() {
-	for s.is_name(s.th_next()) {
-		s.next(true)
-	}
-}
-
 // gets the next byte in string and increases values
-fn (mut s Scanner) next(app bool) byte {
+fn (mut s Scanner) next(app bool) (byte, bool) {
 	mut b := byte(0)
+	mut ba := false
 	if s.pos < s.data.len {
 		b = s.data[s.pos]
+		if s.pos + 1 < s.data.len {
+			ba = s.validate(s.data[s.pos+1])
+		} else {
+			ba = true
+		}
 		if app {
 			s.lit << b
 		} else {	
@@ -176,7 +267,7 @@ fn (mut s Scanner) next(app bool) byte {
 		s.pos += s.next_i()
 		s.char_nr++
 	}
-	return b
+	return b, ba
 }
 
 // returns the theoretical next byte
@@ -188,6 +279,10 @@ fn (mut s Scanner) th_next() byte {
 	return b
 }
 
+fn (mut s Scanner) validate(c byte) bool {
+	return c == ` ` || c == `\t` || c == `\n` || c == `\r`
+}
+
 // calculates the addition to index
 fn (mut s Scanner) next_i() int {
 	mut i := 1
@@ -195,7 +290,7 @@ fn (mut s Scanner) next_i() int {
 		return 1
 	}
 	mut c := s.data[s.pos + i]
-	for (c == ` ` || c == `\t` || c == `\n` || c == `\r`) && (s.pos + i < s.data.len) {
+	for s.validate(c) && (s.pos + i < s.data.len) {
 		i++
 		c = s.data[s.pos + i]
 	}

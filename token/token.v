@@ -3,8 +3,8 @@ module token
 pub struct Token {
 pub:
 	kind Kind
-	pos Position
-	lit string
+	pos  Position
+	lit  string
 }
 
 pub enum Kind {
@@ -27,19 +27,19 @@ pub enum Kind {
 	and
 	logical_or
 	not
-	bit_not // ~
-	question // ?
-	comma // ,
-	semicolon // ;
+	bit_not
+	question
+	comma
+	semicolon
 	colon
-	arrow // <-
+	arrow
 	amp
-	hash // #
-	dollar // $
-	at // @
+	hash
+	dollar
+	at
 	str_dollar
-	left_shift // <<
-	right_shift // >>
+	left_shift
+	right_shift
 	not_in
 	not_is
 	assign
@@ -52,20 +52,20 @@ pub enum Kind {
 	mod_assign
 	or_assign
 	and_assign
-	right_shift_assign // <<=
-	left_shift_assign // >>=
-	lcbr // {
-	rcbr // }
-	lpar // (
-	rpar // )
-	lsbr // [
-	rsbr // ]
+	right_shift_assign
+	left_shift_assign
+	lcbr
+	rcbr
+	lpar
+	rpar
+	lsbr
+	rsbr
 	eq
 	ne
-	gt // >
-	lt // <
-	ge // >=
-	le // <=
+	gt
+	lt
+	ge
+	le
 	comment
 	nl
 	dot // .
@@ -119,6 +119,55 @@ pub enum Kind {
 	keyword_end
 	_end_
 }
+
+pub const (
+	keywords = map{
+		'as':        Kind.key_as
+		'asm':       Kind.key_asm
+		'assert':    Kind.key_assert
+		'atomic':    Kind.key_atomic
+		'break':     Kind.key_break
+		'const':     Kind.key_const
+		'continue':  Kind.key_continue
+		'defer':     Kind.key_defer
+		'else':      Kind.key_else
+		'enum':      Kind.key_enum
+		'false':     Kind.key_false
+		'for':       Kind.key_for
+		'fn':        Kind.key_fn
+		'global':    Kind.key_global
+		'go':        Kind.key_go
+		'goto':      Kind.key_goto
+		'if':        Kind.key_if
+		'import':    Kind.key_import
+		'in':        Kind.key_in
+		'interface': Kind.key_interface
+		'is':        Kind.key_is
+		'match':     Kind.key_match
+		'module':    Kind.key_module
+		'mut':       Kind.key_mut
+		'shared':    Kind.key_shared
+		'lock':      Kind.key_lock
+		'rlock':     Kind.key_rlock
+		'none':      Kind.key_none
+		'return':    Kind.key_return
+		'select':    Kind.key_select
+		'sizeof':    Kind.key_sizeof
+		'likely':    Kind.key_likely
+		'unlikely':  Kind.key_unlikely
+		'offsetof':  Kind.key_offsetof
+		'struct':    Kind.key_struct
+		'true':      Kind.key_true
+		'type':      Kind.key_type
+		'typeof':    Kind.key_typeof
+		'dump':      Kind.key_dump
+		'orelse':    Kind.key_orelse
+		'union':     Kind.key_union
+		'pub':       Kind.key_pub
+		'static':    Kind.key_static
+		'unsafe':    Kind.key_unsafe
+	}
+)
 
 pub fn create_token(kind Kind, file string, line_nr int, char_nr int, lit []byte) Token {
 	return Token{
