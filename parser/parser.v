@@ -79,6 +79,10 @@ fn (mut p Parser) parse_top_stmt() {
 
 fn (mut p Parser) next() {
 	p.tok = p.s.scan()
+	if p.tok.kind == .comment {
+		// do nothing for now
+		p.next()
+	}
 }
 
 fn (mut p Parser) get_name() string {

@@ -67,6 +67,31 @@ pub fn (mut s Scanner) scan() token.Token {
 				s.next(true)
 				return token.create_token(.div_assign, s.filename, line_nr, char_nr, s.lit)
 			}
+			if s.th_next() == `/` {
+				// line comment
+				for {
+					t, _ := s.next(true, true)
+					if t == `\n` {
+						break
+					}
+				}
+				return token.create_token(.comment, s.filename, line_nr, char_nr, s.lit)
+			}
+			if s.th_next() == `*` {
+				mut last := byte(0x00)
+				for {
+					t, _ := s.next(true, true)
+					if last == `*` && t == `/` {
+						break
+					}
+					last = t
+				}
+				l := s.lit
+				s.pos--
+				s.char_nr--
+				s.next(false)
+				return token.create_token(.comment, s.filename, line_nr, char_nr, l)
+			}
 			return token.create_token(.div, s.filename, line_nr, char_nr, s.lit)
 		}
 		`%` {
@@ -130,7 +155,7 @@ pub fn (mut s Scanner) scan() token.Token {
 		`'`, `"` {
 			ch := c
 			for {
-				c, _ = s.next(true)
+				c, _ = s.next(true, true)
 				if c == ch {
 					break
 				}
@@ -250,7 +275,7 @@ pub fn (mut s Scanner) scan() token.Token {
 }
 
 // gets the next byte in string and increases values
-fn (mut s Scanner) next(app bool) (byte, bool) {
+fn (mut s Scanner) next(app bool, extra ...bool) (byte, bool) {
 	mut b := byte(0)
 	mut ba := false
 	if s.pos < s.data.len {
@@ -265,23 +290,32 @@ fn (mut s Scanner) next(app bool) (byte, bool) {
 		} else {	
 			s.lit[0] = b
 		}
-		s.pos++
-		s.char_nr++
-		for {
-			if s.pos >= s.data.len {
-				break
-			}
-			if s.data[s.pos] == ` ` || s.data[s.pos] == `\t` {
-				s.pos++
+		if extra.len > 0 && extra[0] {
+			s.pos++
 				s.char_nr++
-				continue
-			} else if s.data[s.pos] == `\n` {
-				s.pos++
+			if b == `\n` {
 				s.line_nr++
 				s.char_nr = 0
-				continue
-			} else {
-				break
+			}
+		} else {
+			s.pos++
+			s.char_nr++
+			for {
+				if s.pos >= s.data.len {
+					break
+				}
+				if s.data[s.pos] == ` ` || s.data[s.pos] == `\t` {
+					s.pos++
+					s.char_nr++
+					continue
+				} else if s.data[s.pos] == `\n` {
+					s.pos++
+					s.line_nr++
+					s.char_nr = 0
+					continue
+				} else {
+					break
+				}
 			}
 		}
 	}
