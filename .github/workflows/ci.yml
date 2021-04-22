@@ -49,29 +49,29 @@ jobs:
         run: |
           cd lilV
           ./lilV tests/functions.v
-  windows-gcc:
-    runs-on: windows-latest
-    env:
-      VFLAGS: -cc gcc
-    steps:
-      - name: Checkout V
-        uses: actions/checkout@v2
-        with:
-          repository: vlang/v
-      - name: Checkout lilV
-        uses: actions/checkout@v2
-        with:
-          path: lilV
-      - name: Build V
-        run: |
-          ./make.bat -gcc
-      - name: Build lilV
-        run: |
-          .\v.exe lilV
-      - name: Run tests
-        run: |
-          cd lilV
-          .\lilV.exe tests/functions.v
+#  windows-gcc:
+#    runs-on: windows-latest
+#    env:
+#      VFLAGS: -cc gcc
+#    steps:
+#      - name: Checkout V
+#        uses: actions/checkout@v2
+#        with:
+#          repository: vlang/v
+#      - name: Checkout lilV
+#        uses: actions/checkout@v2
+#        with:
+#          path: lilV
+#      - name: Build V
+#        run: |
+#          ./make.bat -gcc
+#      - name: Build lilV
+#        run: |
+#          .\v.exe lilV
+#      - name: Run tests
+#        run: |
+#          cd lilV
+#          .\lilV.exe tests/functions.v
   ubuntu-tcc:
     runs-on: ubuntu-latest
     env:
