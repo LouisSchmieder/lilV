@@ -92,7 +92,7 @@ fn (mut p Parser) get_type() types.Type {
 	mut lit := ''
 	if p.tok.kind != .name {
 		typ := p.table.find_type('void') or {
-			p.error(err)
+			p.error(err.msg)
 			return types.Type{}
 		}
 		return typ
@@ -111,7 +111,7 @@ fn (mut p Parser) get_type() types.Type {
 		tmp_2 := p.tok
 		p.tok = tmp
 		p.tok.lit = lit
-		p.error(err)
+		p.error(err.msg)
 		p.tok = tmp_2
 		return types.Type{}
 	}

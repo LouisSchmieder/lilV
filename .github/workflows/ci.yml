@@ -1,0 +1,93 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
+      - name: Checkout lilV
+        uses: actions/checkout@v2
+        with:
+          repository: LouisSchmieder/lilV
+      - name: Build V
+        run: |
+          make
+          sudo ./v symlink
+      - name: Build lilV
+        run: |
+          cd lilV
+          v .
+      - name: Run tests
+        run: |
+          ./littleV tests/functions.v
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
+       - name: Checkout lilV
+        uses: actions/checkout@v2
+        with:
+          repository: LouisSchmieder/lilV
+      - name: Build V
+        run: |
+          make
+          sudo ./v symlink
+      - name: Build lilV
+        run: |
+          cd lilV
+          v .
+      - name: Run tests
+        run: |
+          ./littleV tests/functions.v
+  windows-gcc:
+    runs-on: windows-latest
+    env:
+      VFLAGS: -cc gcc
+    steps:
+      - name: Checkout V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
+       - name: Checkout lilV
+        uses: actions/checkout@v2
+        with:
+          repository: LouisSchmieder/lilV
+      - name: Build V
+        run: |
+          ./make.bat -gcc
+      - name: Build lilV
+        run: |
+          \v.exe lilV
+      - name: Run tests
+        run: |
+          cd lilV
+          .\littleV.exe tests/functions.v
+  ubuntu-tcc:
+    runs-on: ubuntu-latest
+    env:
+      VFLAGS: -cc tcc -cflags -bt10
+    steps:
+      - name: Checkout V
+        uses: actions/checkout@v2
+        with:
+          repository: vlang/v
+      - name: Build V
+        run: |
+          echo $VFLAGS
+          make
+          sudo ./v symlink
+      - name: Build lilV
+        run: |
+          cd lilV
+          v .
+      - name: Run tests
+        run: |
+          ./littleV tests/functions.v

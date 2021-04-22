@@ -1,7 +1,6 @@
 module parser
 
 import ast
-import types
 
 fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute) ast.FunctionStmt {
 	p.next()

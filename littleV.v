@@ -1,29 +1,31 @@
-import parser
+module main
+
+import os
 import scanner
+import parser
 import util
 
-const (
-	hello_world = "module test
-
-fn test(test C) ABC {}
-
-['test': 123; abc]
 fn main() {
-	a := 123456
-	eprintln('test')
+	args := os.args[1..]
+	compile_file(args[0])
 }
 
-"
-)
-
-fn main() {
-	mut scan := scanner.create_scanner(hello_world, 'testing')
-	mut parser := parser.create_parser(scan)
-	f, err := parser.parse_file()
-	eprintln(f)
+fn compile_file(path string) {
+	data := os.read_file(path) or { '' }
+	mut scan := scanner.create_scanner(data, path)
+	mut pars := parser.create_parser(scan)
+	f, err := pars.parse_file()
 	if err.len > 0 {
-		for error in err {
-			util.write_error_message(error, hello_world)
+		warns := err.filter(it.level == .warn)
+		for warn in warns {
+			util.write_error_message(warn, data)
+		}
+		errors := err.filter(it.level == .error)
+		for error in errors {
+			util.write_error_message(error, data)
+		}
+		if errors.len > 0 {
+			exit(1)
 		}
 	}
 }
