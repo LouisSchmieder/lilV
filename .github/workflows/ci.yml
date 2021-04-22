@@ -67,7 +67,7 @@ jobs:
           ./make.bat -gcc
       - name: Build lilV
         run: |
-          \v.exe lilV
+          .\v.exe lilV
       - name: Run tests
         run: |
           cd lilV

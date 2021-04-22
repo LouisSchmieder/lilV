@@ -1,3 +1,5 @@
+[![CI](https://github.com/LouisSchmieder/lilV/actions/workflows/ci.yml/badge.svg)](https://github.com/LouisSchmieder/lilV/actions/workflows/ci.yml)
+
 # littleV
 A small V compiler in V
 
