@@ -25,7 +25,7 @@ jobs:
       - name: Run tests
         run: |
           cd lilV
-          ./littleV tests/functions.v
+          ./lilV tests/functions.v
   macos:
     runs-on: macos-latest
     steps:
@@ -48,7 +48,7 @@ jobs:
       - name: Run tests
         run: |
           cd lilV
-          ./littleV tests/functions.v
+          ./lilV tests/functions.v
   windows-gcc:
     runs-on: windows-latest
     env:
@@ -71,7 +71,7 @@ jobs:
       - name: Run tests
         run: |
           cd lilV
-          .\littleV.exe tests/functions.v
+          .\lilV.exe tests/functions.v
   ubuntu-tcc:
     runs-on: ubuntu-latest
     env:
@@ -97,5 +97,4 @@ jobs:
       - name: Run tests
         run: |
           cd lilV
-          ls
-          ./littleV tests/functions.v
+          ./lilV tests/functions.v
