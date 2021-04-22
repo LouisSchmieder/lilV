@@ -41,7 +41,7 @@ pub fn write_error_message(error error.Error, file string) {
 
 fn calc_before(i int) string {
 	mut str := ''
-	l := 5 - i.str().len
+	l := 5 - (i + 1).str().len
 	for _ in 0..l {
 		str += ' '
 	}
