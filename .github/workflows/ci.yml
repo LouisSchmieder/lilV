@@ -97,4 +97,5 @@ jobs:
       - name: Run tests
         run: |
           cd lilV
+          ls
           ./littleV tests/functions.v
