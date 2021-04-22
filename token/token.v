@@ -4,6 +4,7 @@ pub struct Token {
 pub:
 	kind Kind
 	pos  Position
+pub mut:
 	lit  string
 }
 

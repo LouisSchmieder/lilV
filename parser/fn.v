@@ -1,22 +1,19 @@
 module parser
 
 import ast
+import types
 
-fn (mut p Parser) function() ast.FunctionStmt {
+fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute) ast.FunctionStmt {
 	p.next()
 	pos := p.tok.pos
 	name := p.get_name()
 	parameter := p.parameter()
 	p.next()
-	mut ret := ''
-	if p.tok.kind != .lcbr {
-		ret = p.get_type()
-		p.next()
-	}
+	mut ret := p.get_type()
 	p.expect(.lcbr)
 	p.next()
 
-	mut stmts := []ast.Stmt{}
+	// mut stmts := []ast.Stmt{}
 
 	/*for {
 		stmts << p.parse_stmt() or {
@@ -24,12 +21,15 @@ fn (mut p Parser) function() ast.FunctionStmt {
 		}
 	}`*/
 
-	p.next()
+	//p.next()
 	p.expect(.rcbr)
 	return ast.FunctionStmt{
 		pos: pos
+		is_pub: is_pub
 		name: name
+		ret: ret
 		parameter: parameter
+		attrs: attrs
 	}
 }
 
@@ -43,7 +43,6 @@ fn (mut p Parser) parameter() []ast.Parameter {
 		name := p.get_name()
 		p.next()
 		typ := p.get_type()
-		p.next()
 		params << ast.Parameter{
 			pos: pos
 			typ: typ

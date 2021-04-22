@@ -1,6 +1,7 @@
 module ast
 
 import token
+import types
 
 type Expr = StringExpr | NumberExpr
 
@@ -23,8 +24,9 @@ pub:
 	pos token.Position
 	is_pub bool
 	name string
-	ret string
+	ret types.Type
 	parameter []Parameter
+	attrs []Attribute
 	mod string
 	stmts []Stmt
 }
@@ -38,6 +40,6 @@ pub:
 pub struct Parameter {
 pub:
 	pos token.Position
-	typ string
+	typ types.Type
 	name string
 }
