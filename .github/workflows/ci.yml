@@ -21,7 +21,7 @@ jobs:
       - name: Build lilV
         run: |
           cd lilV
-          v .
+          v . - o littleV
       - name: Run tests
         run: |
           ./littleV tests/functions.v
