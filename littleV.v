@@ -13,6 +13,7 @@ fn main() {
 	debug('Testing files...', 0)
 	compile_file('./tests/functions.v')
 	compile_file('./tests/comments.v')
+	compile_file('./tests/if.v')
 }
 
 fn compile_file(path string) {
@@ -39,6 +40,7 @@ fn compile_file(path string) {
 			exit(1)
 		}
 	}
+	eprintln(f)
 }
 
 fn debug(msg string, level int) {

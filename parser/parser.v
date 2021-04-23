@@ -80,44 +80,53 @@ fn (mut p Parser) parse_top_stmt() {
 }
 
 fn (mut p Parser) parse_stmt() ?ast.Stmt {
-	if p.tok.kind != .name {
-		return error('')
-	}
-	pos := p.tok.pos
-	mut mod := p.tok.lit
-	mut function := p.tok.lit
-	p.next()
-	if p.tok.kind == .dot {
-		p.next()
-		p.expect(.name)
-		function = p.tok.lit
-		p.next()
-	}
-	p.expect(.lpar)
+	mut stmt := ast.Stmt(ast.Unknown{})
+	match p.tok.kind {
+		.name {
+			pos := p.tok.pos
+			mut mod := p.tok.lit
+			mut function := p.tok.lit
+			p.next()
+			if p.tok.kind == .dot {
+				p.next()
+				p.expect(.name)
+				function = p.tok.lit
+				p.next()
+			}
+			p.expect(.lpar)
 
-	mut parameter := []ast.Expr{}
+			mut parameter := []ast.Expr{}
 
-	for {
-		p.next()
-		parameter << p.expr()
-		p.next()
-		if p.tok.kind != .comma {
-			break
+			for {
+				p.next()
+				parameter << p.expr()
+				p.next()
+				if p.tok.kind != .comma {
+					break
+				}
+			}
+			p.expect(.rpar)
+			p.next()
+
+			if mod == function {
+				mod = p.mod
+			}
+			stmt = ast.FunctionCallStmt{
+				name: function
+				mod: mod
+				pos: pos
+				params: parameter
+			}
+		}
+		.key_if {
+			stmt = p.parse_if()
+		}
+		else {
+			return error('Unknown statement $p.tok.kind')
 		}
 	}
-	p.expect(.rpar)
-	p.next()
 
-	if mod == function {
-		mod = p.mod
-	}
-
-	return ast.FunctionCallStmt{
-		name: function
-		mod: mod
-		pos: pos
-		params: parameter
-	}
+	return stmt
 }
 
 fn (mut p Parser) expr() ast.Expr {
@@ -145,6 +154,19 @@ fn (mut p Parser) expr() ast.Expr {
 			return ast.StringExpr{}
 		}
 	}
+}
+
+fn (mut p Parser) parse_block() []ast.Stmt {
+	p.expect(.lcbr)
+	p.next()
+	mut stmts := []ast.Stmt{}
+	for {
+		stmts << p.parse_stmt() or {
+			break
+		}
+	}
+	p.expect(.rcbr)
+	return stmts
 }
 
 fn (mut p Parser) next() {

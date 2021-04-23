@@ -9,19 +9,7 @@ fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute) ast.FunctionStmt 
 	parameter := p.parameter()
 	p.next()
 	mut ret := p.get_type()
-	p.expect(.lcbr)
-	p.next()
-
-	mut stmts := []ast.Stmt{}
-
-	for {
-		stmts << p.parse_stmt() or {
-			break
-		}
-	}
-
-	//p.next()
-	p.expect(.rcbr)
+	stmts := p.parse_block()
 	return ast.FunctionStmt{
 		pos: pos
 		is_pub: is_pub

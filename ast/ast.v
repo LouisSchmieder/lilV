@@ -3,9 +3,9 @@ module ast
 import token
 import types
 
-type Expr = StringExpr | NumberExpr | IdentExpr
+type Expr = StringExpr | NumberExpr | IdentExpr | Unknown
 
-type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt
+type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | Unknown
 
 pub struct StringExpr {
 pub:
@@ -57,3 +57,21 @@ pub:
 	typ types.Type
 	name string
 }
+
+pub struct IfStmt {
+pub:
+	pos token.Position
+	cond Expr
+	stmts []Stmt
+	elses []ElseStmt
+}
+
+pub struct ElseStmt {
+pub:
+	pos token.Position
+	has_cond bool
+	cond Expr
+	stmts []Stmt
+}
+
+pub struct Unknown{}
