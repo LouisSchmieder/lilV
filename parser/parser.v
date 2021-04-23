@@ -13,6 +13,7 @@ mut:
 	err []error.Error
 	tok token.Token
 	stmts []ast.Stmt
+	mod string
 }
 
 pub fn create_parser(s &scanner.Scanner) &Parser {
@@ -46,6 +47,7 @@ fn (mut p Parser) parse_module() {
 		p.next()
 		name = p.get_name()
 	}
+	p.mod = name
 	p.stmts << ast.ModuleStmt{
 		pos: p.pos()
 		name: name
@@ -73,6 +75,74 @@ fn (mut p Parser) parse_top_stmt() {
 		}
 		else {
 			p.error('Unexpected top level stmt: `$p.tok.lit`')
+		}
+	}
+}
+
+fn (mut p Parser) parse_stmt() ?ast.Stmt {
+	if p.tok.kind != .name {
+		return error('')
+	}
+	pos := p.tok.pos
+	mut mod := p.tok.lit
+	mut function := p.tok.lit
+	p.next()
+	if p.tok.kind == .dot {
+		p.next()
+		p.expect(.name)
+		function = p.tok.lit
+		p.next()
+	}
+	p.expect(.lpar)
+
+	mut parameter := []ast.Expr{}
+
+	for {
+		p.next()
+		parameter << p.expr()
+		p.next()
+		if p.tok.kind != .comma {
+			break
+		}
+	}
+	p.expect(.rpar)
+	p.next()
+
+	if mod == function {
+		mod = p.mod
+	}
+
+	return ast.FunctionCallStmt{
+		name: function
+		mod: mod
+		pos: pos
+		params: parameter
+	}
+}
+
+fn (mut p Parser) expr() ast.Expr {
+	pos := p.tok.pos
+	match p.tok.kind {
+		.string {
+			return ast.StringExpr{
+				pos: pos
+				str: p.tok.lit
+			}
+		}
+		.number {
+			return ast.NumberExpr{
+				pos: pos
+				num: p.tok.lit
+			}
+		}
+		.name {
+			return ast.IdentExpr{
+				pos: pos
+				name: p.tok.lit
+			}
+		}
+		else {
+			return ast.StringExpr{}
 		}
 	}
 }

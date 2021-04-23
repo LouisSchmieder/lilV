@@ -12,13 +12,13 @@ fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute) ast.FunctionStmt 
 	p.expect(.lcbr)
 	p.next()
 
-	// mut stmts := []ast.Stmt{}
+	mut stmts := []ast.Stmt{}
 
-	/*for {
+	for {
 		stmts << p.parse_stmt() or {
 			break
 		}
-	}`*/
+	}
 
 	//p.next()
 	p.expect(.rcbr)
@@ -29,6 +29,7 @@ fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute) ast.FunctionStmt 
 		ret: ret
 		parameter: parameter
 		attrs: attrs
+		stmts: stmts
 	}
 }
 

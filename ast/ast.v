@@ -3,9 +3,9 @@ module ast
 import token
 import types
 
-type Expr = StringExpr | NumberExpr
+type Expr = StringExpr | NumberExpr | IdentExpr
 
-type Stmt = FunctionStmt | ModuleStmt
+type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt
 
 pub struct StringExpr {
 pub:
@@ -19,6 +19,12 @@ pub:
 	num string
 }
 
+pub struct IdentExpr {
+pub:
+	pos token.Position
+	name string
+}
+
 pub struct FunctionStmt {
 pub:
 	pos token.Position
@@ -29,6 +35,14 @@ pub:
 	attrs []Attribute
 	mod string
 	stmts []Stmt
+}
+
+pub struct FunctionCallStmt {
+pub:
+	pos token.Position
+	mod string
+	name string
+	params []Expr
 }
 
 pub struct ModuleStmt {

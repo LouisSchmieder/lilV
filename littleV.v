@@ -21,7 +21,7 @@ fn compile_file(path string) {
 	mut scan := scanner.create_scanner(data, path)
 	mut pars := parser.create_parser(scan)
 	debug('`$path` start parsing', 2)
-	_, err := pars.parse_file()
+	f, err := pars.parse_file()
 	debug('`$path` finsh parsing', 2)
 	debug('`$path` has $err.len problems', 2)
 	if err.len > 0 {
