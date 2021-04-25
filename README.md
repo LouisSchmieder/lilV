@@ -3,6 +3,9 @@
 # lilV
 A small V compiler in V
 
+## Why?!
+Because I'm bored and want to learn a bit more about compilers
+
 ## Process
 Windows isn't supported yet
 
@@ -35,9 +38,6 @@ Examples of fmt'd files you can see in `/tests` folder (with this fileending `.v
 ### Ast
 For now the ast is printed too in the `/tests`. It's done that anyone can see the structure, so it's not important, just nice :)
 
-
-## Why?!
-Because I'm bored and want to learn a bit more about compilers
-
-## Goals
-There are no goals, maybe to build a little program idk
+## Contribution
+If you want to contribute please create an extra branch with your changes. Please add a file in `/tests` with the new feature and be sure that it compiles.
+Then just create a pull request. Thanks for the help
