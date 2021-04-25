@@ -6,6 +6,7 @@ import parser
 import fmt
 import util
 import gen
+import time
 
 const (
 	tabs = '\t\t\t\t\t\t\t\t\t\t\t'
@@ -22,13 +23,17 @@ fn main() {
 }
 
 fn compile_file(path string) {
+	mut total := i64(0)
 	debug('Testing `$path`', 1)
 	data := os.read_file(path) or { '' }
 	mut scan := scanner.create_scanner(data, path)
 	mut pars := parser.create_parser(scan)
 	debug('`$path` start parsing', 2)
+	mut sw := time.new_stopwatch(auto_start: true)
 	out, err := pars.parse_file()
-	debug('`$path` finsh parsing', 2)
+	sw.stop()
+	debug('`$path` finsh parsing (took ${sw.elapsed().microseconds()} ms)', 2)
+	total += sw.elapsed().microseconds()
 	debug('`$path` has $err.len problems', 2)
 	if err.len > 0 {
 		warns := err.filter(it.level == .warn)
@@ -53,16 +58,23 @@ fn compile_file(path string) {
 	debug('`$path` format ast', 2)
 	mut f := fmt.create_fmt(out)
 	debug('`$path` formatted ast', 2)
+	sw.restart()
 	res := f.format()
+	sw.stop()
 	is_formatted := if res != data { 'not ' } else {''}
-	debug('`$path` is ${is_formatted}formatted', 3)
+	debug('`$path` is ${is_formatted}formatted (took ${sw.elapsed().microseconds()} ms)', 3)
+	total += sw.elapsed().microseconds()
 	os.write_file('${path}.fmted', '$res') or { panic(err) }
 
 	debug('`$path` cgen starting', 2)
 	mut g := gen.create_gen([&out])
+	sw.restart()
 	cr := g.gen()
-	debug('`$path` cgen finished', 2)
+	sw.stop()
+	debug('`$path` cgen finished (took ${sw.elapsed().microseconds()} ms)', 2)
+	total += sw.elapsed().microseconds()
 	os.write_file('${path}.c', '$cr') or { panic(err) }
+	debug('`$path` took to finish the job $total ms', 1)
 }
 
 fn debug(msg string, level int) {
