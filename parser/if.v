@@ -7,7 +7,6 @@ fn (mut p Parser) parse_if() ast.IfStmt {
 	pos := p.tok.pos
 	p.next()
 	expr := p.expr()
-	p.next()
 	stmts := p.parse_block()
 	mut elses := []ast.ElseStmt{}
 	for {
@@ -22,7 +21,6 @@ fn (mut p Parser) parse_if() ast.IfStmt {
 		if has_cond {
 			p.next()
 			e = p.expr()
-			p.next()
 		}
 		block := p.parse_block()
 		elses << ast.ElseStmt{

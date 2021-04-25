@@ -19,6 +19,7 @@ fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute, attrs_pos token.P
 		parameter: parameter
 		attrs: attrs
 		attrs_pos: attrs_pos
+		mod: p.mod
 		stmts: stmts
 	}
 }

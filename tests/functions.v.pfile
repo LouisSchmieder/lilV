@@ -1,4 +1,5 @@
 ast.File{
+    mod: 'test'
     stmts: [ast.Stmt(ast.ModuleStmt{
         pos: token.Position{
             file: './tests/functions.v'
@@ -19,7 +20,10 @@ ast.File{
             name: 'int'
             tname: 'int'
             bname: 'int'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed long'
+            })
         }
         parameter: [ast.Parameter{
             pos: token.Position{
@@ -32,7 +36,10 @@ ast.File{
                 name: 'i8'
                 tname: 'i8'
                 bname: 'i8'
-                kind: struct_
+                kind: builtin
+                info: types.Info(types.Builtin{
+                    cbase: 'signed char'
+                })
             }
             name: 'test'
         }]
@@ -42,27 +49,61 @@ ast.File{
             char_nr: 0
         }
         attrs: []
-        mod: ''
-        stmts: []
+        mod: 'test'
+        stmts: [ast.Stmt(ast.ReturnStmt{
+            pos: token.Position{
+                file: './tests/functions.v'
+                line_nr: 3
+                char_nr: 1
+            }
+            expr: ast.Expr(ast.CastExpr{
+                pos: token.Position{
+                    file: './tests/functions.v'
+                    line_nr: 3
+                    char_nr: 8
+                }
+                typ: types.Type{
+                    mod: ''
+                    name: 'int'
+                    tname: 'int'
+                    bname: 'int'
+                    kind: builtin
+                    info: types.Info(types.Builtin{
+                        cbase: 'signed long'
+                    })
+                }
+                expr: ast.Expr(ast.IdentExpr{
+                    pos: token.Position{
+                        file: './tests/functions.v'
+                        line_nr: 3
+                        char_nr: 12
+                    }
+                    name: 'test'
+                })
+            })
+        })]
     }), ast.Stmt(ast.FunctionStmt{
         pos: token.Position{
             file: './tests/functions.v'
-            line_nr: 5
+            line_nr: 7
             char_nr: 3
         }
         is_pub: false
         name: 'main'
         ret: types.Type{
             mod: ''
-            name: 'void'
-            tname: 'void'
-            bname: 'void'
-            kind: struct_
+            name: 'void_'
+            tname: 'void_'
+            bname: 'void_'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'void'
+            })
         }
         parameter: []
         attrs_pos: token.Position{
             file: './tests/functions.v'
-            line_nr: 4
+            line_nr: 6
             char_nr: 0
         }
         attrs: [ast.Attribute{
@@ -78,19 +119,19 @@ ast.File{
             arg: ''
             arg_kind: string
         }]
-        mod: ''
+        mod: 'test'
         stmts: [ast.Stmt(ast.FunctionCallStmt{
             pos: token.Position{
                 file: './tests/functions.v'
-                line_nr: 6
+                line_nr: 8
                 char_nr: 1
             }
-            mod: ''
+            mod: 'test'
             name: 'test'
             params: [ast.Expr(ast.NumberExpr{
                 pos: token.Position{
                     file: './tests/functions.v'
-                    line_nr: 6
+                    line_nr: 8
                     char_nr: 7
                 }
                 num: '123'
@@ -103,62 +144,101 @@ ast.File{
             name: 'i8'
             tname: 'i8'
             bname: 'i8'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed char'
+            })
         }, types.Type{
             mod: ''
             name: 'i16'
             tname: 'i16'
             bname: 'i16'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed short'
+            })
         }, types.Type{
             mod: ''
             name: 'int'
             tname: 'int'
             bname: 'int'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed long'
+            })
         }, types.Type{
             mod: ''
             name: 'i64'
             tname: 'i64'
             bname: 'i64'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed long long'
+            })
         }, types.Type{
             mod: ''
-            name: 'u8'
-            tname: 'u8'
-            bname: 'u8'
-            kind: struct_
+            name: 'byte'
+            tname: 'byte'
+            bname: 'byte'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned char'
+            })
         }, types.Type{
             mod: ''
             name: 'u16'
             tname: 'u16'
             bname: 'u16'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned short'
+            })
         }, types.Type{
             mod: ''
             name: 'u32'
             tname: 'u32'
             bname: 'u32'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned long'
+            })
         }, types.Type{
             mod: ''
             name: 'u64'
             tname: 'u64'
             bname: 'u64'
-            kind: struct_
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned long long'
+            })
         }, types.Type{
             mod: ''
-            name: 'string'
-            tname: 'string'
-            bname: 'string'
-            kind: struct_
+            name: 'charptr'
+            tname: 'charptr'
+            bname: 'charptr'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'char *'
+            })
         }, types.Type{
             mod: ''
-            name: 'void'
-            tname: 'void'
-            bname: 'void'
-            kind: struct_
+            name: 'voidptr'
+            tname: 'voidptr'
+            bname: 'voidptr'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'void *'
+            })
+        }, types.Type{
+            mod: ''
+            name: 'void_'
+            tname: 'void_'
+            bname: 'void_'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'void'
+            })
         }]
-        type_idx: {'i8': 0, 'i16': 1, 'int': 2, 'i64': 3, 'u8': 4, 'u16': 5, 'u32': 6, 'u64': 7, 'string': 8, 'void': 9}
+        type_idx: {'i8': 0, 'i16': 1, 'int': 2, 'i64': 3, 'byte': 4, 'u16': 5, 'u32': 6, 'u64': 7, 'charptr': 8, 'voidptr': 9, 'void_': 10}
     }
 }

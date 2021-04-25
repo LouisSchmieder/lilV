@@ -5,6 +5,7 @@ import scanner
 import parser
 import fmt
 import util
+import gen
 
 const (
 	tabs = '\t\t\t\t\t\t\t\t\t\t\t'
@@ -43,6 +44,9 @@ fn compile_file(path string) {
 	}
 	os.write_file('${path}.pfile', '$out') or { panic(err) }
 
+
+	// format
+
 	debug('`$path` format ast', 2)
 	mut f := fmt.create_fmt(out)
 	debug('`$path` formatted ast', 2)
@@ -50,6 +54,12 @@ fn compile_file(path string) {
 	is_formatted := if res != data { 'not ' } else {''}
 	debug('`$path` is ${is_formatted}formatted', 3)
 	os.write_file('${path}.fmted', '$res') or { panic(err) }
+
+	debug('`$path` cgen starting', 2)
+	mut g := gen.create_gen([&out])
+	cr := g.gen()
+	debug('`$path` cgen finished', 2)
+	os.write_file('${path}.c', '$cr') or { panic(err) }
 }
 
 fn debug(msg string, level int) {

@@ -3,9 +3,9 @@ module ast
 import token
 import types
 
-type Expr = StringExpr | NumberExpr | IdentExpr | Unknown
+type Expr = StringExpr | NumberExpr | IdentExpr | Unknown | CastExpr
 
-type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | CommentStmt | ImportStmt | Unknown
+type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | CommentStmt | ImportStmt | Unknown | ReturnStmt
 
 pub struct StringExpr {
 pub:
@@ -88,6 +88,19 @@ pub:
 	pos token.Position
 	multiline bool
 	msg string
+}
+
+pub struct ReturnStmt {
+pub:
+	pos token.Position
+	expr Expr
+}
+
+pub struct CastExpr {
+pub:
+	pos token.Position
+	typ types.Type
+	expr Expr
 }
 
 pub struct Unknown{}

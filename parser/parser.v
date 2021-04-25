@@ -39,6 +39,7 @@ pub fn (mut p Parser) parse_file() (ast.File, []error.Error) {
 	return ast.File{
 		stmts: p.stmts
 		table: p.table
+		mod: p.mod
 	}, p.err
 }
 
@@ -129,7 +130,6 @@ fn (mut p Parser) parse_stmt() ?ast.Stmt {
 			for {
 				p.next()
 				parameter << p.expr()
-				p.next()
 				if p.tok.kind != .comma {
 					break
 				}
@@ -138,7 +138,7 @@ fn (mut p Parser) parse_stmt() ?ast.Stmt {
 			p.next()
 
 			if mod == function {
-				mod = ''
+				mod = p.mod
 			}
 			stmt = ast.FunctionCallStmt{
 				name: function
@@ -150,6 +150,15 @@ fn (mut p Parser) parse_stmt() ?ast.Stmt {
 		.key_if {
 			stmt = p.parse_if()
 		}
+		.key_return {
+			pos := p.pos()
+			p.next()
+			expr := p.expr()
+			stmt = ast.ReturnStmt{
+				pos: pos
+				expr: expr
+			}
+		}
 		else {
 			return error('Unknown statement $p.tok.kind')
 		}
@@ -160,26 +169,49 @@ fn (mut p Parser) parse_stmt() ?ast.Stmt {
 
 fn (mut p Parser) expr() ast.Expr {
 	pos := p.tok.pos
+	lit := p.tok.lit
 	match p.tok.kind {
 		.string {
+			p.next()
 			return ast.StringExpr{
 				pos: pos
-				str: p.tok.lit
+				str: lit
 			}
 		}
 		.number {
+			p.next()
 			return ast.NumberExpr{
 				pos: pos
-				num: p.tok.lit
+				num: lit
 			}
 		}
 		.name {
+			typ := p.get_name()
+			if p.table.get_idx(typ) > 0 {
+				p.next()
+				p.expect(.lpar)
+				p.next()
+				expr := p.expr()
+				p.expect(.rpar)
+				p.next()
+				t := p.table.find_type(typ) or {
+					p.error(err)
+					types.Type{}
+				}
+				return ast.CastExpr{
+					pos: pos
+					typ: t
+					expr: expr
+				}
+			}
+			p.next()
 			return ast.IdentExpr{
 				pos: pos
-				name: p.tok.lit
+				name: lit
 			}
 		}
 		else {
+			p.next()
 			return ast.StringExpr{}
 		}
 	}
@@ -220,7 +252,7 @@ fn (mut p Parser) get_name() string {
 fn (mut p Parser) get_type() types.Type {
 	mut lit := ''
 	if p.tok.kind != .name {
-		typ := p.table.find_type('void') or {
+		typ := p.table.find_type('void_') or {
 			p.error(err.msg)
 			return types.Type{}
 		}

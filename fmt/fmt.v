@@ -167,7 +167,7 @@ fn (mut f Fmt) function_stmt(stmt ast.FunctionStmt) {
 	}
 	f.write(')')
 
-	if f.file.table.get_idx(stmt.ret.name) != 9 {
+	if f.file.table.get_idx(stmt.ret.name) != 10 {
 		f.write(' $stmt.ret.name')
 	}
 
@@ -186,7 +186,7 @@ fn (mut f Fmt) function_stmt(stmt ast.FunctionStmt) {
 
 fn (mut f Fmt) function_call_stmt(stmt ast.FunctionCallStmt) {
 	f.pos = stmt.pos
-	if stmt.mod != '' {
+	if stmt.mod != f.file.mod {
 		f.write('${stmt.mod}.')
 	}
 	f.write('${stmt.name} (')
