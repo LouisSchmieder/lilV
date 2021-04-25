@@ -13,9 +13,12 @@ const (
 
 fn main() {
 	debug('Testing files...', 0)
-	compile_file('./tests/functions.v')
-	compile_file('./tests/comments.v')
-	compile_file('./tests/if.v')
+	files := os.ls('tests') or { panic(err) }
+	for f in files {
+		if f.ends_with('.v') {
+			compile_file('./tests/$f')
+		}
+	}
 }
 
 fn compile_file(path string) {

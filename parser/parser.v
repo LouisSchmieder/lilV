@@ -90,6 +90,7 @@ fn (mut p Parser) parse_top_stmt() {
 	attrs, attrs_pos := p.parse_attributes()
 	if p.tok.kind == .key_pub {
 		is_pub = true
+		p.next()
 	}
 	if p.tok.kind !in [.key_fn, .key_enum, .key_struct] {
 		if attrs.len > 0 {
@@ -102,6 +103,9 @@ fn (mut p Parser) parse_top_stmt() {
 	match p.tok.kind {
 		.key_fn {
 			p.stmts << p.function(is_pub, attrs, attrs_pos)
+		}
+		.key_const {
+			p.stmts << p.consts(is_pub)
 		}
 		else {
 			p.error('Unexpected top level stmt: `$p.tok.lit`')

@@ -2,64 +2,72 @@ ast.File{
     mod: 'main'
     stmts: [ast.Stmt(ast.ModuleStmt{
         pos: token.Position{
-            file: './tests/comments.v'
+            file: './tests/consts.v'
             line_nr: 0
             char_nr: 0
         }
         name: 'main'
-    }), ast.Stmt(ast.ImportStmt{
+    }), ast.Stmt(ast.ConstStmt{
         pos: token.Position{
-            file: './tests/comments.v'
+            file: './tests/consts.v'
             line_nr: 2
-            char_nr: 0
-        }
-        mod: 'test'
-        has_as: true
-        alias: 'abc'
-    }), ast.Stmt(ast.CommentStmt{
-        pos: token.Position{
-            file: './tests/comments.v'
-            line_nr: 4
-            char_nr: 0
-        }
-        multiline: false
-        msg: '// test
-'
-    }), ast.Stmt(ast.CommentStmt{
-        pos: token.Position{
-            file: './tests/comments.v'
-            line_nr: 5
-            char_nr: 0
-        }
-        multiline: false
-        msg: '/* test */'
-    }), ast.Stmt(ast.FunctionStmt{
-        pos: token.Position{
-            file: './tests/comments.v'
-            line_nr: 7
-            char_nr: 7
+            char_nr: 4
         }
         is_pub: true
-        name: 'main'
-        ret: types.Type{
-            mod: ''
-            name: 'void_'
-            tname: 'void_'
-            bname: 'void_'
-            kind: builtin
-            info: types.Info(types.Builtin{
-                cbase: 'void'
+        consts: [ast.Const{
+            pos: token.Position{
+                file: './tests/consts.v'
+                line_nr: 2
+                char_nr: 10
+            }
+            name: 'abc'
+            expr: ast.Expr(ast.StringExpr{
+                pos: token.Position{
+                    file: './tests/consts.v'
+                    line_nr: 2
+                    char_nr: 16
+                }
+                str: ''def''
             })
-        }
-        parameter: []
-        attrs_pos: token.Position{
-            file: './tests/comments.v'
-            line_nr: 7
+        }]
+    }), ast.Stmt(ast.ConstStmt{
+        pos: token.Position{
+            file: './tests/consts.v'
+            line_nr: 3
             char_nr: 0
         }
-        attrs: []
-        mod: 'main'
-        stmts: []
+        is_pub: false
+        consts: [ast.Const{
+            pos: token.Position{
+                file: './tests/consts.v'
+                line_nr: 4
+                char_nr: 1
+            }
+            name: 'test'
+            expr: ast.Expr(ast.NumberExpr{
+                pos: token.Position{
+                    file: './tests/consts.v'
+                    line_nr: 4
+                    char_nr: 8
+                }
+                num: '123'
+            })
+        }, ast.Const{
+            pos: token.Position{
+                file: './tests/consts.v'
+                line_nr: 5
+                char_nr: 1
+            }
+            name: 'abc'
+            expr: ast.Expr(ast.NumberExpr{
+                pos: token.Position{
+                    file: './tests/consts.v'
+                    line_nr: 5
+                    char_nr: 7
+                }
+                num: '544'
+            })
+        }]
     })]
     table: &types.Table{
         types: [types.Type{

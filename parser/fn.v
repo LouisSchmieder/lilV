@@ -5,7 +5,7 @@ import token
 
 fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute, attrs_pos token.Position) ast.FunctionStmt {
 	p.next()
-	pos := p.tok.pos
+	pos := p.pos()
 	name := p.get_name()
 	parameter := p.parameter()
 	p.next()

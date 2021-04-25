@@ -78,6 +78,9 @@ fn (mut f Fmt) stmt(stmt ast.Stmt) {
 		ast.IfStmt {
 			f.if_stmt(stmt)
 		}
+		ast.ConstStmt {
+			f.const_stmt(stmt)
+		}
 		else {}
 	}
 }
@@ -230,6 +233,44 @@ fn (mut f Fmt) else_stmt(stmt ast.ElseStmt) {
 		f.stmt(s)
 	}
 	f.down()
+}
+
+fn (mut f Fmt) const_stmt(stmt ast.ConstStmt) {
+	f.pos = stmt.pos
+	if stmt.is_pub {
+		f.write('pub ')
+	}
+	f.write('const ')
+	one_line := stmt.consts.len == 1
+	if !one_line {
+		f.write('(')
+		f.up()
+		defer {
+			f.down()
+			f.write('\n)')
+		}
+	}
+
+	mut longest_name := 0
+
+	for c in stmt.consts {
+		if c.name.len > longest_name {
+			longest_name = c.name.len
+		}
+	}
+
+	longest_name += 1
+
+	for c in stmt.consts {
+		if !one_line {
+			f.pos = c.pos
+		}
+		spaces := ' '.repeat(longest_name - c.name.len)
+		f.write('$c.name$spaces= ')
+		f.expr(c.expr)
+	}
+	
+	f.nl()
 }
 
 fn (mut f Fmt) string_expr(expr ast.StringExpr) {

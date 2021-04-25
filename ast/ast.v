@@ -5,7 +5,7 @@ import types
 
 type Expr = StringExpr | NumberExpr | IdentExpr | Unknown | CastExpr
 
-type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | CommentStmt | ImportStmt | Unknown | ReturnStmt
+type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | CommentStmt | ImportStmt | Unknown | ReturnStmt | ConstStmt
 
 pub struct StringExpr {
 pub:
@@ -100,6 +100,20 @@ pub struct CastExpr {
 pub:
 	pos token.Position
 	typ types.Type
+	expr Expr
+}
+
+pub struct ConstStmt {
+pub:
+	pos token.Position
+	is_pub bool
+	consts []Const
+}
+
+pub struct Const {
+pub:
+	pos token.Position
+	name string
 	expr Expr
 }
 
