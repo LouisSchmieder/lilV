@@ -148,6 +148,9 @@ fn (mut g Gen) stmt(stmt ast.Stmt) {
 		ast.ConstStmt {
 			g.const_stmt(stmt)
 		}
+		ast.DeclareStmt {
+			g.decl_stmt(stmt)
+		}
 		else {}
 	}
 }
@@ -243,4 +246,11 @@ fn (mut g Gen) const_stmt(stmt ast.ConstStmt) {
 		g.expr(c.expr)
 		g.cwriteln('')
 	}
+}
+
+fn (mut g Gen) decl_stmt(stmt ast.DeclareStmt) {
+	typ := g.file.get_type(stmt.expr).bname
+	g.write('$typ $stmt.name = ')
+	g.expr(stmt.expr)
+	g.writeln(';')
 }

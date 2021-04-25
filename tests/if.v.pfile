@@ -45,6 +45,7 @@ ast.File{
                     line_nr: 3
                     char_nr: 4
                 }
+                expr: unknown sum type value
                 name: 'ab'
             })
             stmts: [ast.Stmt(ast.FunctionCallStmt{
@@ -53,7 +54,7 @@ ast.File{
                     line_nr: 4
                     char_nr: 2
                 }
-                mod: 'main'
+                mod: 'eprintln'
                 name: 'eprintln'
                 params: [ast.Expr(ast.StringExpr{
                     pos: token.Position{
@@ -77,6 +78,7 @@ ast.File{
                         line_nr: 5
                         char_nr: 11
                     }
+                    expr: unknown sum type value
                     name: 'c'
                 })
                 stmts: [ast.Stmt(ast.FunctionCallStmt{
@@ -85,7 +87,7 @@ ast.File{
                         line_nr: 6
                         char_nr: 2
                     }
-                    mod: 'main'
+                    mod: 'eprintln'
                     name: 'eprintln'
                     params: [ast.Expr(ast.StringExpr{
                         pos: token.Position{
@@ -110,7 +112,7 @@ ast.File{
                         line_nr: 8
                         char_nr: 2
                     }
-                    mod: 'main'
+                    mod: 'eprintln'
                     name: 'eprintln'
                     params: [ast.Expr(ast.NumberExpr{
                         pos: token.Position{

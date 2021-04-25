@@ -46,3 +46,28 @@ fn (mut p Parser) parameter() []ast.Parameter {
 	p.expect(.rpar)
 	return params
 }
+
+fn (mut p Parser) parse_function_call(pos token.Position, name string) ast.FunctionCallStmt {
+	function := name.all_after_last('.')
+	mod := name.all_before_last('.') 
+
+	p.expect(.lpar)
+
+	mut parameter := []ast.Expr{}
+
+	for {
+		p.next()
+		parameter << p.expr()
+		if p.tok.kind != .comma {
+			break
+		}
+	}
+	p.expect(.rpar)
+	p.next()
+	return ast.FunctionCallStmt{
+		name: function
+		mod: mod
+		pos: pos
+		params: parameter
+	}
+}

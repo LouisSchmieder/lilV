@@ -12,10 +12,10 @@ typedef void void_;
 void_ main__main();
 void_ main__main() {
 if (ab){
-main__eprintln("test");
+eprintln__eprintln("test");
 } else if(c) {
-main__eprintln("abc");
+eprintln__eprintln("abc");
 } else {
-main__eprintln(123);
+eprintln__eprintln(123);
 }
 }

@@ -118,37 +118,16 @@ fn (mut p Parser) parse_stmt() ?ast.Stmt {
 	match p.tok.kind {
 		.name {
 			pos := p.tok.pos
-			mut mod := p.tok.lit
-			mut function := p.tok.lit
+			mut name := p.tok.lit
 			p.next()
-			if p.tok.kind == .dot {
-				p.next()
-				p.expect(.name)
-				function = p.tok.lit
-				p.next()
-			}
-			p.expect(.lpar)
-
-			mut parameter := []ast.Expr{}
-
-			for {
-				p.next()
-				parameter << p.expr()
-				if p.tok.kind != .comma {
-					break
+			match p.tok.kind {
+				.lpar {
+					stmt = p.parse_function_call(pos, name)
 				}
-			}
-			p.expect(.rpar)
-			p.next()
-
-			if mod == function {
-				mod = p.mod
-			}
-			stmt = ast.FunctionCallStmt{
-				name: function
-				mod: mod
-				pos: pos
-				params: parameter
+				.decl_assign {
+					stmt = p.decl_stmt(pos, name)
+				}
+				else {}
 			}
 		}
 		.key_if {

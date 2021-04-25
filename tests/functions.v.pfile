@@ -78,6 +78,7 @@ ast.File{
                         line_nr: 3
                         char_nr: 12
                     }
+                    expr: unknown sum type value
                     name: 'test'
                 })
             })
@@ -120,21 +121,37 @@ ast.File{
             arg_kind: string
         }]
         mod: 'test'
-        stmts: [ast.Stmt(ast.FunctionCallStmt{
+        stmts: [ast.Stmt(ast.DeclareStmt{
             pos: token.Position{
                 file: './tests/functions.v'
                 line_nr: 8
                 char_nr: 1
             }
-            mod: 'test'
-            name: 'test'
-            params: [ast.Expr(ast.NumberExpr{
+            name: 'abc'
+            expr: ast.Expr(ast.NumberExpr{
                 pos: token.Position{
                     file: './tests/functions.v'
                     line_nr: 8
-                    char_nr: 7
+                    char_nr: 8
                 }
                 num: '123'
+            })
+        }), ast.Stmt(ast.FunctionCallStmt{
+            pos: token.Position{
+                file: './tests/functions.v'
+                line_nr: 9
+                char_nr: 1
+            }
+            mod: 'test'
+            name: 'test'
+            params: [ast.Expr(ast.IdentExpr{
+                pos: token.Position{
+                    file: './tests/functions.v'
+                    line_nr: 9
+                    char_nr: 7
+                }
+                expr: unknown sum type value
+                name: 'abc'
             })]
         })]
     })]

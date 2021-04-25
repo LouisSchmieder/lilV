@@ -15,5 +15,6 @@ int test__test(i8 test) {
 return ((int)test);
 }
 void_ test__main() {
-test__test(123);
+int abc = 123;
+test__test(abc);
 }

@@ -2,10 +2,10 @@ module main
 
 fn main () {
 	if ab {
-		eprintln ('test')
+		eprintln.eprintln ('test')
 	} else if c {
-		eprintln ('abc')
+		eprintln.eprintln ('abc')
 	} else {
-		eprintln (123)
+		eprintln.eprintln (123)
 	} 
 }
