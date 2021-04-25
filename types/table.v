@@ -43,6 +43,10 @@ pub fn (mut table Table) find_type(name string) ?Type {
 	return table.types[table.type_idx[name]]
 }
 
+pub fn (mut table Table) get_idx(name string) int {
+	return table.type_idx[name]
+}
+
 fn (mut table Table) register_builtin(name string, kind Kind) {
 	typ := Type{
 		mod: ''

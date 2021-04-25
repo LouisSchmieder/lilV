@@ -3,6 +3,7 @@ module main
 import os
 import scanner
 import parser
+import fmt
 import util
 
 const (
@@ -41,6 +42,14 @@ fn compile_file(path string) {
 		}
 	}
 	os.write_file('${path}.pfile', '$out') or { panic(err) }
+
+	debug('`$path` format ast', 2)
+	mut f := fmt.create_fmt(out)
+	debug('`$path` formatted ast', 2)
+	res := f.format()
+	is_formatted := if res != data { 'not ' } else {''}
+	debug('`$path` is ${is_formatted}formatted', 3)
+	os.write_file('${path}.fmted', '$res') or { panic(err) }
 }
 
 fn debug(msg string, level int) {

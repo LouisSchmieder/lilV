@@ -340,5 +340,5 @@ fn (mut s Scanner) is_number(b byte) bool {
 }
 
 fn (mut s Scanner) is_name(b byte) bool {
-	return s.is_number(b) || b == `_` || (b >= `a` && b <= `z`) || (b >= `A` && b <= `Z`)
+	return s.is_number(b) || b == `_` || (b >= `a` && b <= `z`) || (b >= `A` && b <= `Z`) || b == `.`
 } 

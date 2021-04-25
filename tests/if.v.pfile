@@ -3,7 +3,7 @@ ast.File{
         pos: token.Position{
             file: './tests/if.v'
             line_nr: 0
-            char_nr: 7
+            char_nr: 0
         }
         name: 'main'
     }), ast.Stmt(ast.FunctionStmt{
@@ -22,6 +22,11 @@ ast.File{
             kind: struct_
         }
         parameter: []
+        attrs_pos: token.Position{
+            file: './tests/if.v'
+            line_nr: 2
+            char_nr: 0
+        }
         attrs: []
         mod: ''
         stmts: [ast.Stmt(ast.IfStmt{
@@ -44,7 +49,7 @@ ast.File{
                     line_nr: 4
                     char_nr: 2
                 }
-                mod: 'main'
+                mod: ''
                 name: 'eprintln'
                 params: [ast.Expr(ast.StringExpr{
                     pos: token.Position{
@@ -76,7 +81,7 @@ ast.File{
                         line_nr: 6
                         char_nr: 2
                     }
-                    mod: 'main'
+                    mod: ''
                     name: 'eprintln'
                     params: [ast.Expr(ast.StringExpr{
                         pos: token.Position{
@@ -101,7 +106,7 @@ ast.File{
                         line_nr: 8
                         char_nr: 2
                     }
-                    mod: 'main'
+                    mod: ''
                     name: 'eprintln'
                     params: [ast.Expr(ast.NumberExpr{
                         pos: token.Position{

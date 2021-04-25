@@ -3,13 +3,39 @@ ast.File{
         pos: token.Position{
             file: './tests/comments.v'
             line_nr: 0
-            char_nr: 7
+            char_nr: 0
         }
         name: 'main'
-    }), ast.Stmt(ast.FunctionStmt{
+    }), ast.Stmt(ast.ImportStmt{
+        pos: token.Position{
+            file: './tests/comments.v'
+            line_nr: 2
+            char_nr: 0
+        }
+        mod: 'test'
+        has_as: true
+        alias: 'abc'
+    }), ast.Stmt(ast.CommentStmt{
+        pos: token.Position{
+            file: './tests/comments.v'
+            line_nr: 4
+            char_nr: 0
+        }
+        multiline: false
+        msg: '// test
+'
+    }), ast.Stmt(ast.CommentStmt{
         pos: token.Position{
             file: './tests/comments.v'
             line_nr: 5
+            char_nr: 0
+        }
+        multiline: false
+        msg: '/* test */'
+    }), ast.Stmt(ast.FunctionStmt{
+        pos: token.Position{
+            file: './tests/comments.v'
+            line_nr: 7
             char_nr: 3
         }
         is_pub: false
@@ -22,6 +48,11 @@ ast.File{
             kind: struct_
         }
         parameter: []
+        attrs_pos: token.Position{
+            file: './tests/comments.v'
+            line_nr: 7
+            char_nr: 0
+        }
         attrs: []
         mod: ''
         stmts: []

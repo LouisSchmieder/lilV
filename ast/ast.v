@@ -5,7 +5,7 @@ import types
 
 type Expr = StringExpr | NumberExpr | IdentExpr | Unknown
 
-type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | Unknown
+type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | CommentStmt | ImportStmt | Unknown
 
 pub struct StringExpr {
 pub:
@@ -32,6 +32,7 @@ pub:
 	name string
 	ret types.Type
 	parameter []Parameter
+	attrs_pos token.Position
 	attrs []Attribute
 	mod string
 	stmts []Stmt
@@ -49,6 +50,14 @@ pub struct ModuleStmt {
 pub:
 	pos token.Position
 	name string
+}
+
+pub struct ImportStmt {
+pub:
+	pos token.Position
+	mod string
+	has_as bool
+	alias string
 }
 
 pub struct Parameter {
@@ -72,6 +81,13 @@ pub:
 	has_cond bool
 	cond Expr
 	stmts []Stmt
+}
+
+pub struct CommentStmt {
+pub:
+	pos token.Position
+	multiline bool
+	msg string
 }
 
 pub struct Unknown{}

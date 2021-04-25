@@ -28,8 +28,9 @@ pub fn create_parser(s &scanner.Scanner) &Parser {
 pub fn (mut p Parser) parse_file() (ast.File, []error.Error) {
 	p.next()
 	p.parse_module()
+	p.parse_imports()
 
-	p.next()
+
 	for p.tok.kind != .eof {
 		p.parse_top_stmt()
 		p.next()
@@ -43,21 +44,49 @@ pub fn (mut p Parser) parse_file() (ast.File, []error.Error) {
 
 fn (mut p Parser) parse_module() {
 	mut name := 'main'
+	pos := p.pos()
 	if p.tok.kind == .key_module {
 		p.next()
 		name = p.get_name()
 	}
+	p.next()
 	p.mod = name
 	p.stmts << ast.ModuleStmt{
-		pos: p.pos()
+		pos: pos
 		name: name
+	}
+}
+
+fn (mut p Parser) parse_imports() {
+	for p.tok.kind == .key_import {
+		pos := p.tok.pos
+		p.next()
+		mod := p.get_name()
+		p.next()
+		if p.tok.kind != .key_as {
+			p.stmts << ast.ImportStmt{
+				pos: pos
+				mod: mod
+				has_as: false
+			}
+			continue
+		}
+		p.next()
+		alias := p.get_name()
+		p.stmts << ast.ImportStmt{
+			pos: pos
+			mod: mod
+			has_as: true
+			alias: alias
+		}
+		p.next()
 	}
 }
 
 fn (mut p Parser) parse_top_stmt() {
 	mut is_pub := false
 	tmp := p.tok
-	attrs := p.parse_attributes()
+	attrs, attrs_pos := p.parse_attributes()
 	if p.tok.kind == .key_pub {
 		is_pub = true
 	}
@@ -71,7 +100,7 @@ fn (mut p Parser) parse_top_stmt() {
 	}
 	match p.tok.kind {
 		.key_fn {
-			p.stmts << p.function(is_pub, attrs)
+			p.stmts << p.function(is_pub, attrs, attrs_pos)
 		}
 		else {
 			p.error('Unexpected top level stmt: `$p.tok.lit`')
@@ -109,7 +138,7 @@ fn (mut p Parser) parse_stmt() ?ast.Stmt {
 			p.next()
 
 			if mod == function {
-				mod = p.mod
+				mod = ''
 			}
 			stmt = ast.FunctionCallStmt{
 				name: function
@@ -172,7 +201,11 @@ fn (mut p Parser) parse_block() []ast.Stmt {
 fn (mut p Parser) next() {
 	p.tok = p.s.scan()
 	if p.tok.kind == .comment {
-		// do nothing for now
+		p.stmts << ast.CommentStmt{
+			pos: p.tok.pos
+			msg: p.tok.lit
+			multiline: p.tok.lit.split_into_lines().len > 1
+		}
 		p.next()
 	}
 }
@@ -196,13 +229,6 @@ fn (mut p Parser) get_type() types.Type {
 	lit += p.tok.lit
 	tmp := p.tok
 	p.next()
-	for p.tok.kind == .dot {
-		lit += '.'
-		p.next()
-		p.expect(.name)
-		lit += p.tok.lit
-		p.next()
-	}
 	typ := p.table.find_type(lit) or {
 		tmp_2 := p.tok
 		p.tok = tmp

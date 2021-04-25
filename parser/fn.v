@@ -1,8 +1,9 @@
 module parser
 
 import ast
+import token
 
-fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute) ast.FunctionStmt {
+fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute, attrs_pos token.Position) ast.FunctionStmt {
 	p.next()
 	pos := p.tok.pos
 	name := p.get_name()
@@ -17,6 +18,7 @@ fn (mut p Parser) function(is_pub bool, attrs []ast.Attribute) ast.FunctionStmt 
 		ret: ret
 		parameter: parameter
 		attrs: attrs
+		attrs_pos: attrs_pos
 		stmts: stmts
 	}
 }

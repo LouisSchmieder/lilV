@@ -1,11 +1,13 @@
 module parser
 
 import ast
+import token
 
-fn (mut p Parser) parse_attributes() []ast.Attribute {
+fn (mut p Parser) parse_attributes() ([]ast.Attribute, token.Position) {
 	if p.tok.kind != .lsbr {
-		return []ast.Attribute{}
+		return []ast.Attribute{}, p.pos()
 	}
+	pos := p.pos()
 	mut attrs := []ast.Attribute{}
 	for {
 		p.next()
@@ -18,7 +20,7 @@ fn (mut p Parser) parse_attributes() []ast.Attribute {
 	}
 	p.expect(.rsbr)
 	p.next()
-	return attrs
+	return attrs, pos
 }
 
 fn (mut p Parser) parse_attribute() ast.Attribute {

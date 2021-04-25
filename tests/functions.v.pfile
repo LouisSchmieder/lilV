@@ -3,7 +3,7 @@ ast.File{
         pos: token.Position{
             file: './tests/functions.v'
             line_nr: 0
-            char_nr: 7
+            char_nr: 0
         }
         name: 'test'
     }), ast.Stmt(ast.FunctionStmt{
@@ -25,7 +25,7 @@ ast.File{
             pos: token.Position{
                 file: './tests/functions.v'
                 line_nr: 2
-                char_nr: 8
+                char_nr: 9
             }
             typ: types.Type{
                 mod: ''
@@ -36,6 +36,11 @@ ast.File{
             }
             name: 'test'
         }]
+        attrs_pos: token.Position{
+            file: './tests/functions.v'
+            line_nr: 2
+            char_nr: 0
+        }
         attrs: []
         mod: ''
         stmts: []
@@ -55,6 +60,11 @@ ast.File{
             kind: struct_
         }
         parameter: []
+        attrs_pos: token.Position{
+            file: './tests/functions.v'
+            line_nr: 4
+            char_nr: 0
+        }
         attrs: [ast.Attribute{
             name: 'test'
             name_kind: string
@@ -75,13 +85,13 @@ ast.File{
                 line_nr: 6
                 char_nr: 1
             }
-            mod: 'test'
+            mod: ''
             name: 'test'
             params: [ast.Expr(ast.NumberExpr{
                 pos: token.Position{
                     file: './tests/functions.v'
                     line_nr: 6
-                    char_nr: 6
+                    char_nr: 7
                 }
                 num: '123'
             })]

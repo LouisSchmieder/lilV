@@ -1,5 +1,7 @@
 module ast
 
+import token
+
 pub struct Attribute {
 pub:
 	name string
