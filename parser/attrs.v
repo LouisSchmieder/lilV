@@ -25,7 +25,7 @@ fn (mut p Parser) parse_attributes() ([]ast.Attribute, token.Position) {
 
 fn (mut p Parser) parse_attribute() ast.Attribute {
 	mut name := ''
-	mut kind := ast.AttributeKind.name
+	mut kind := ast.AttribKind.name
 	if p.tok.kind == .string {
 		kind = .string
 		name = p.tok.lit[1..p.tok.lit.len - 1]
@@ -48,7 +48,7 @@ fn (mut p Parser) parse_attribute() ast.Attribute {
 	}
 	p.next()
 	mut arg := ''
-	mut arg_kind := ast.AttributeKind.name
+	mut arg_kind := ast.AttribKind.name
 	if p.tok.kind == .string {
 		arg_kind = .string
 		arg = p.tok.lit[1..p.tok.lit.len - 1]

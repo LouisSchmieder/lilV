@@ -5,13 +5,13 @@ import token
 pub struct Attribute {
 pub:
 	name string
-	name_kind AttributeKind
+	name_kind AttribKind
 	has_arg bool
 	arg string
-	arg_kind AttributeKind
+	arg_kind AttribKind
 }
 
-pub enum AttributeKind {
+pub enum AttribKind {
 	string
 	name
 	number
