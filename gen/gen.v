@@ -10,10 +10,12 @@ mut:
 	builder strings.Builder
 	headers strings.Builder
 	functions strings.Builder
+	consts strings.Builder
 	types strings.Builder
 	files []&ast.File
 	file &ast.File
 	table &types.Table
+	writer &strings.Builder
 }
 
 pub fn create_gen(files []&ast.File) &Gen {
@@ -22,9 +24,11 @@ pub fn create_gen(files []&ast.File) &Gen {
 		headers: strings.new_builder(256)
 		functions: strings.new_builder(1024)
 		types: strings.new_builder(1024)
+		consts: strings.new_builder(1024)
 		files: files
 		file: 0
 		table: 0
+		writer: 0
 	}
 }
 
@@ -37,6 +41,7 @@ pub fn (mut g Gen) gen() string {
 	mut end := ''
 	end += g.headers.str()
 	end += g.types.str()
+	end += g.consts.str()
 	end += g.functions.str()
 	end += g.builder.str()
 	return end	
@@ -68,36 +73,62 @@ fn (mut g Gen) gen_types() {
 	}
 }
 
+fn (mut g Gen) wrln(str string) {
+	g.writer.writeln(str)
+}
+
+fn (mut g Gen) wr(str string) {
+	g.writer.write_string(str)
+}
+
 fn (mut g Gen) write(str string) {
-	g.builder.write_string(str)
+	g.writer = &g.builder
+	g.wr(str)
 }
 
 fn (mut g Gen) writeln(str string) {
-	g.builder.writeln(str)
+	g.writer = &g.builder
+	g.wrln(str)
 }
 
 fn (mut g Gen) hwrite(str string) {
-	g.headers.write_string(str)
+	g.writer = &g.headers
+	g.wr(str)
 }
 
 fn (mut g Gen) hwriteln(str string) {
-	g.headers.writeln(str)
+	g.writer = &g.headers
+	g.wrln(str)
 }
 
 fn (mut g Gen) fwrite(str string) {
-	g.functions.write_string(str)
+	g.writer = &g.functions
+	g.wr(str)
 }
 
 fn (mut g Gen) fwriteln(str string) {
-	g.functions.writeln(str)
+	g.writer = &g.functions
+	g.wrln(str)
 }
 
 fn (mut g Gen) twrite(str string) {
-	g.types.write_string(str)
+	g.writer = &g.types
+	g.wr(str)
 }
 
 fn (mut g Gen) twriteln(str string) {
-	g.types.writeln(str)
+	g.writer = &g.types
+	g.wrln(str)
+}
+
+fn (mut g Gen) cwrite(str string) {
+	g.writer = &g.consts
+	g.wr(str)
+}
+
+fn (mut g Gen) cwriteln(str string) {
+	g.writer = &g.consts
+	g.wrln(str)
 }
 
 fn (mut g Gen) stmt(stmt ast.Stmt) {
@@ -114,6 +145,9 @@ fn (mut g Gen) stmt(stmt ast.Stmt) {
 		ast.IfStmt {
 			g.if_stmt(stmt)
 		}
+		ast.ConstStmt {
+			g.const_stmt(stmt)
+		}
 		else {}
 	}
 }
@@ -121,18 +155,19 @@ fn (mut g Gen) stmt(stmt ast.Stmt) {
 fn (mut g Gen) expr(expr ast.Expr) {
 	match expr {
 		ast.IdentExpr {
-			g.write('$expr.name')
+			g.wr('$expr.name')
 		}
 		ast.CastExpr {
-			g.write('(($expr.typ.bname)')
+			g.wr('(($expr.typ.bname)')
 			g.expr(expr.expr)
-			g.write(')')
+			g.wr(')')
 		}
 		ast.NumberExpr {
-			g.write('$expr.num')
+			g.wr('$expr.num')
 		}
 		ast.StringExpr {
-			g.write('"$expr.str"')
+			str := expr.str.all_before_last('\'')[1..]
+			g.wr('"$str"')
 		}
 		else {}
 	}
@@ -198,5 +233,14 @@ fn (mut g Gen) else_stmt(stmt ast.ElseStmt) {
 	g.writeln(' {')
 	for s in stmt.stmts {
 		g.stmt(s)
+	}
+}
+
+fn (mut g Gen) const_stmt(stmt ast.ConstStmt) {
+	for c in stmt.consts {
+		name := '${g.file.mod}__$c.name'
+		g.cwrite('#define $name ')
+		g.expr(c.expr)
+		g.cwriteln('')
 	}
 }

@@ -9,3 +9,6 @@ typedef unsigned long long u64;
 typedef char * charptr;
 typedef void * voidptr;
 typedef void void_;
+#define main__abc "def"
+#define main__test 123
+#define main__abc 544
