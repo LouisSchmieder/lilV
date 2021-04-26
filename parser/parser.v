@@ -178,7 +178,7 @@ fn (mut p Parser) expr() ast.Expr {
 				p.expect(.rpar)
 				p.next()
 				t := p.table.find_type(typ) or {
-					p.error(err)
+					p.error(err.msg)
 					types.Type{}
 				}
 				return ast.CastExpr{

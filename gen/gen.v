@@ -14,6 +14,7 @@ mut:
 	types strings.Builder
 	files []&ast.File
 	file &ast.File
+	errs []error.Error
 	table &types.Table
 	writer &strings.Builder
 }
@@ -26,6 +27,7 @@ pub fn create_gen(files []&ast.File) &Gen {
 		types: strings.new_builder(1024)
 		consts: strings.new_builder(1024)
 		files: files
+		errs: []error.Error{}
 		file: 0
 		table: 0
 		writer: 0
@@ -82,52 +84,52 @@ fn (mut g Gen) wr(str string) {
 }
 
 fn (mut g Gen) write(str string) {
-	g.writer = &g.builder
+	unsafe { g.writer = &g.builder }
 	g.wr(str)
 }
 
 fn (mut g Gen) writeln(str string) {
-	g.writer = &g.builder
+	unsafe { g.writer = &g.builder }
 	g.wrln(str)
 }
 
 fn (mut g Gen) hwrite(str string) {
-	g.writer = &g.headers
+	unsafe { g.writer = &g.headers }
 	g.wr(str)
 }
 
 fn (mut g Gen) hwriteln(str string) {
-	g.writer = &g.headers
+	unsafe { g.writer = &g.headers }
 	g.wrln(str)
 }
 
 fn (mut g Gen) fwrite(str string) {
-	g.writer = &g.functions
+	unsafe { g.writer = &g.functions }
 	g.wr(str)
 }
 
 fn (mut g Gen) fwriteln(str string) {
-	g.writer = &g.functions
+	unsafe { g.writer = &g.functions }
 	g.wrln(str)
 }
 
 fn (mut g Gen) twrite(str string) {
-	g.writer = &g.types
+	unsafe { g.writer = &g.types }
 	g.wr(str)
 }
 
 fn (mut g Gen) twriteln(str string) {
-	g.writer = &g.types
+	unsafe { g.writer = &g.types }
 	g.wrln(str)
 }
 
 fn (mut g Gen) cwrite(str string) {
-	g.writer = &g.consts
+	unsafe { g.writer = &g.consts }
 	g.wr(str)
 }
 
 fn (mut g Gen) cwriteln(str string) {
-	g.writer = &g.consts
+	unsafe { g.writer = &g.consts }
 	g.wrln(str)
 }
 

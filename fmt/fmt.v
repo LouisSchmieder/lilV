@@ -14,6 +14,7 @@ mut:
 	builder strings.Builder
 	level int
 	file &ast.File
+	errs []error.Error
 	last_pos token.Position
 	pos token.Position
 	next_nl int
@@ -24,6 +25,7 @@ pub fn create_fmt(file &ast.File) &Fmt {
 		builder: strings.new_builder(1024)
 		level: 0
 		file: file
+		errs: []error.Error{}
 		next_nl: 0
 	}
 }
