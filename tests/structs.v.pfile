@@ -1,0 +1,292 @@
+ast.File{
+    mod: 'main'
+    stmts: [ast.Stmt(ast.ModuleStmt{
+        pos: token.Position{
+            file: './tests/structs.v'
+            line_nr: 0
+            char_nr: 0
+        }
+        name: 'main'
+    }), ast.Stmt(ast.SumtypeStmt{
+        pos: token.Position{
+            file: './tests/structs.v'
+            line_nr: 2
+            char_nr: 9
+        }
+        is_pub: true
+        name: 'ABC'
+        names: ['byte', 'int', 'Name', 'Test', 'abc', 'string', 'u64', 'test2']
+        types: []
+    }), ast.Stmt(ast.StructStmt{
+        pos: token.Position{
+            file: './tests/structs.v'
+            line_nr: 5
+            char_nr: 7
+        }
+        is_pub: false
+        name: 'Name'
+        attrs: [ast.Attribute{
+            name: 'abc'
+            name_kind: name
+            has_arg: false
+            arg: ''
+            arg_kind: string
+        }]
+        attrs_pos: token.Position{
+            file: './tests/structs.v'
+            line_nr: 4
+            char_nr: 0
+        }
+        fields: [ast.StructField{
+            pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 6
+                char_nr: 1
+            }
+            name: 'test'
+            typ: types.Type{
+                mod: ''
+                name: 'u32'
+                tname: 'u32'
+                bname: 'u32'
+                kind: builtin
+                info: types.Info(types.Builtin{
+                    cbase: 'unsigned long'
+                })
+                is_array: false
+            }
+            is_pub: false
+            is_mut: false
+            attrs: []
+            attrs_pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 7
+                char_nr: 0
+            }
+        }, ast.StructField{
+            pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 8
+                char_nr: 1
+            }
+            name: 'field'
+            typ: types.Type{
+                mod: ''
+                name: 'byte'
+                tname: 'byte'
+                bname: 'byte'
+                kind: builtin
+                info: types.Info(types.Builtin{
+                    cbase: 'unsigned char'
+                })
+                is_array: false
+            }
+            is_pub: false
+            is_mut: true
+            attrs: [ast.Attribute{
+                name: 'help'
+                name_kind: name
+                has_arg: false
+                arg: ''
+                arg_kind: string
+            }]
+            attrs_pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 8
+                char_nr: 12
+            }
+        }, ast.StructField{
+            pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 9
+                char_nr: 1
+            }
+            name: 'nums'
+            typ: types.Type{
+                mod: ''
+                name: 'int'
+                tname: 'int'
+                bname: 'int'
+                kind: builtin
+                info: types.Info(types.Builtin{
+                    cbase: 'signed long'
+                })
+                is_array: true
+            }
+            is_pub: false
+            is_mut: true
+            attrs: []
+            attrs_pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 10
+                char_nr: 0
+            }
+        }, ast.StructField{
+            pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 11
+                char_nr: 1
+            }
+            name: 'abc'
+            typ: types.Type{
+                mod: ''
+                name: 'int'
+                tname: 'int'
+                bname: 'int'
+                kind: builtin
+                info: types.Info(types.Builtin{
+                    cbase: 'signed long'
+                })
+                is_array: false
+            }
+            is_pub: true
+            is_mut: false
+            attrs: []
+            attrs_pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 12
+                char_nr: 0
+            }
+        }, ast.StructField{
+            pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 13
+                char_nr: 1
+            }
+            name: 'cd'
+            typ: types.Type{
+                mod: ''
+                name: 'u64'
+                tname: 'u64'
+                bname: 'u64'
+                kind: builtin
+                info: types.Info(types.Builtin{
+                    cbase: 'unsigned long long'
+                })
+                is_array: false
+            }
+            is_pub: true
+            is_mut: true
+            attrs: []
+            attrs_pos: token.Position{
+                file: './tests/structs.v'
+                line_nr: 14
+                char_nr: 0
+            }
+        }]
+    })]
+    table: &types.Table{
+        types: [types.Type{
+            mod: ''
+            name: 'i8'
+            tname: 'i8'
+            bname: 'i8'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed char'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'i16'
+            tname: 'i16'
+            bname: 'i16'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed short'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'int'
+            tname: 'int'
+            bname: 'int'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed long'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'i64'
+            tname: 'i64'
+            bname: 'i64'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'signed long long'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'byte'
+            tname: 'byte'
+            bname: 'byte'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned char'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'u16'
+            tname: 'u16'
+            bname: 'u16'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned short'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'u32'
+            tname: 'u32'
+            bname: 'u32'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned long'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'u64'
+            tname: 'u64'
+            bname: 'u64'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'unsigned long long'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'charptr'
+            tname: 'charptr'
+            bname: 'charptr'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'char *'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'voidptr'
+            tname: 'voidptr'
+            bname: 'voidptr'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'void *'
+            })
+            is_array: false
+        }, types.Type{
+            mod: ''
+            name: 'void_'
+            tname: 'void_'
+            bname: 'void_'
+            kind: builtin
+            info: types.Info(types.Builtin{
+                cbase: 'void'
+            })
+            is_array: false
+        }]
+        type_idx: {'i8': 0, 'i16': 1, 'int': 2, 'i64': 3, 'byte': 4, 'u16': 5, 'u32': 6, 'u64': 7, 'charptr': 8, 'voidptr': 9, 'void_': 10}
+    }
+}

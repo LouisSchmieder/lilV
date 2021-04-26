@@ -14,6 +14,7 @@ mut:
 	tok token.Token
 	stmts []ast.Stmt
 	mod string
+	next bool
 }
 
 pub fn create_parser(s &scanner.Scanner) &Parser {
@@ -32,8 +33,11 @@ pub fn (mut p Parser) parse_file() (ast.File, []error.Error) {
 
 
 	for p.tok.kind != .eof {
+		p.next = true
 		p.parse_top_stmt()
-		p.next()
+		if p.next {
+			p.next()
+		}
 	}
 
 	return ast.File{
@@ -104,8 +108,14 @@ fn (mut p Parser) parse_top_stmt() {
 		.key_fn {
 			p.stmts << p.function(is_pub, attrs, attrs_pos)
 		}
+		.key_struct {
+			p.stmts << p.parse_struct(is_pub, attrs, attrs_pos)
+		}
 		.key_const {
 			p.stmts << p.consts(is_pub)
+		}
+		.key_type {
+			p.stmts << p.parse_sumtype(is_pub)
 		}
 		else {
 			p.error('Unexpected top level stmt: `$p.tok.lit`')
@@ -234,23 +244,33 @@ fn (mut p Parser) get_name() string {
 
 fn (mut p Parser) get_type() types.Type {
 	mut lit := ''
-	if p.tok.kind != .name {
+	if p.tok.kind != .name && p.tok.kind != .lsbr {
 		typ := p.table.find_type('void_') or {
 			p.error(err.msg)
 			return types.Type{}
 		}
 		return typ
 	}
+	mut is_arr := false
+	if p.tok.kind == .lsbr {
+		p.next()
+		p.expect(.rsbr)
+		p.next()
+		is_arr = true
+	}
 	lit += p.tok.lit
 	tmp := p.tok
 	p.next()
-	typ := p.table.find_type(lit) or {
+	mut typ := p.table.find_type(lit) or {
 		tmp_2 := p.tok
 		p.tok = tmp
 		p.tok.lit = lit
 		p.error(err.msg)
 		p.tok = tmp_2
 		return types.Type{}
+	}
+	if is_arr {
+		typ.set_array()
 	}
 	return typ
 }
@@ -271,6 +291,15 @@ fn (mut p Parser) error(msg string) {
 	p.err << error.Error{
 		pos: p.tok.pos
 		len: p.tok.lit.len
+		level: .error
+		msg: msg
+	}
+}
+
+fn (mut p Parser) errorp(msg string, pos token.Position, len int) {
+	p.err << error.Error{
+		pos: pos
+		len: len
 		level: .error
 		msg: msg
 	}

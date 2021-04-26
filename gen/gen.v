@@ -71,7 +71,7 @@ fn (mut g Gen) gen_types() {
 			}
 			else {}
 		}
-		g.twriteln(' $typ.bname;')
+		g.twriteln(' ${typ.bname()};')
 	}
 }
 
@@ -163,7 +163,7 @@ fn (mut g Gen) expr(expr ast.Expr) {
 			g.wr('$expr.name')
 		}
 		ast.CastExpr {
-			g.wr('(($expr.typ.bname)')
+			g.wr('((${expr.typ.bname()})')
 			g.expr(expr.expr)
 			g.wr(')')
 		}
@@ -180,11 +180,11 @@ fn (mut g Gen) expr(expr ast.Expr) {
 
 fn (mut g Gen) function_stmt(stmt ast.FunctionStmt) {
 	name := '${stmt.mod}__$stmt.name'
-	typ := stmt.ret.bname
+	typ := stmt.ret.bname()
 	mut line := '$typ ${name}('
 
 	for i, p in stmt.parameter {
-		line += '$p.typ.bname $p.name'
+		line += '${p.typ.bname()} $p.name'
 		if i > stmt.parameter.len - 1 {
 			line += ', '
 		}
@@ -251,7 +251,7 @@ fn (mut g Gen) const_stmt(stmt ast.ConstStmt) {
 }
 
 fn (mut g Gen) decl_stmt(stmt ast.DeclareStmt) {
-	typ := g.file.get_type(stmt.expr).bname
+	typ := g.file.get_type(stmt.expr).bname()
 	g.write('$typ $stmt.name = ')
 	g.expr(stmt.expr)
 	g.writeln(';')

@@ -5,7 +5,7 @@ import types
 
 type Expr = StringExpr | NumberExpr | IdentExpr | Unknown | CastExpr
 
-type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | CommentStmt | ImportStmt | Unknown | ReturnStmt | ConstStmt | DeclareStmt
+type Stmt = FunctionStmt | ModuleStmt | FunctionCallStmt | IfStmt | CommentStmt | ImportStmt | Unknown | ReturnStmt | ConstStmt | DeclareStmt | StructStmt | IncludeStmt | FlagStmt | SumtypeStmt
 
 pub struct StringExpr {
 pub:
@@ -123,6 +123,47 @@ pub:
 	pos token.Position
 	name string
 	expr Expr
+}
+
+pub struct StructStmt {
+pub:
+	pos token.Position
+	is_pub bool
+	name string
+	attrs []Attribute
+	attrs_pos token.Position
+	fields []StructField
+}
+
+pub struct StructField {
+pub:
+	pos token.Position
+	name string
+	typ types.Type
+	is_pub bool
+	is_mut bool
+	attrs []Attribute
+	attrs_pos token.Position
+}
+
+pub struct IncludeStmt {
+pub:
+	pos token.Position
+	include string
+}
+
+pub struct SumtypeStmt {
+pub:
+	pos token.Position
+	is_pub bool
+	name string
+	names []string
+	types []types.Type
+}
+
+pub struct FlagStmt {
+	pos token.Position
+	str string
 }
 
 pub struct Unknown{}

@@ -7,6 +7,7 @@ import token
 
 const (
 	tabs = '\t\t\t\t\t\t\t\t\t\t\t'
+	max_types_per_line = 6
 )
 
 pub struct Fmt {
@@ -82,6 +83,12 @@ fn (mut f Fmt) stmt(stmt ast.Stmt) {
 		}
 		ast.ConstStmt {
 			f.const_stmt(stmt)
+		}
+		ast.StructStmt {
+			f.struct_stmt(stmt)
+		}
+		ast.SumtypeStmt {
+			f.sumtype_stmt(stmt)
 		}
 		else {}
 	}
@@ -165,7 +172,7 @@ fn (mut f Fmt) function_stmt(stmt ast.FunctionStmt) {
 	f.write('fn $stmt.name ')
 	f.write('(')
 	for i, param in stmt.parameter {
-		f.write('$param.name $param.typ.name')
+		f.write('$param.name ${param.typ.name()}')
 		if i < stmt.parameter.len - 1 {
 			f.write(', ')
 		}
@@ -173,7 +180,7 @@ fn (mut f Fmt) function_stmt(stmt ast.FunctionStmt) {
 	f.write(')')
 
 	if f.file.table.get_idx(stmt.ret.name) != 10 {
-		f.write(' $stmt.ret.name')
+		f.write(' ${stmt.ret.name()}')
 	}
 
 	f.write(' {')
@@ -273,6 +280,117 @@ fn (mut f Fmt) const_stmt(stmt ast.ConstStmt) {
 	}
 	
 	f.nl()
+}
+
+fn (mut f Fmt) struct_stmt(stmt ast.StructStmt) {
+	if stmt.attrs.len > 0 {
+		f.attributes(stmt.attrs, stmt.attrs_pos)
+	}
+	f.pos = stmt.pos
+	if stmt.is_pub {
+		f.write('pub ')
+	}
+	f.write('struct $stmt.name {')
+	mut longest_name := 0
+	mut longest_type := 0
+	for field in stmt.fields {
+		if field.name.len > longest_name {
+			longest_name = field.name.len
+		}
+		if field.typ.name().len > longest_type {
+			longest_type = field.typ.name().len
+		}
+	}
+
+	longest_name += 1
+	longest_type += 1
+
+	prnm := stmt.fields.filter(!it.is_pub && !it.is_mut) // private not mutable
+	prm := stmt.fields.filter(!it.is_pub && it.is_mut) // private mutable
+	pnm := stmt.fields.filter(it.is_pub && !it.is_mut) // public not mutable
+	pm := stmt.fields.filter(it.is_pub && it.is_mut) // public mutable
+	f.up()
+	if prnm.len > 0 {
+		for field in prnm {
+			f.pos = field.pos
+			nspaces := ' '.repeat(longest_name - field.name.len)
+			tspaces := ' '.repeat(longest_type - field.typ.name().len)
+			f.write('$field.name$nspaces${field.typ.name()}$tspaces')
+			if field.attrs.len > 0 {
+				f.attributes(field.attrs, field.attrs_pos)
+			}
+		}
+	}
+	if prm.len > 0 {
+		f.down()
+		f.write('mut:', true)
+		f.up()
+		for field in prm {
+			f.pos = field.pos
+			nspaces := ' '.repeat(longest_name - field.name.len)
+			tspaces := ' '.repeat(longest_type - field.typ.name().len)
+			f.write('$field.name$nspaces${field.typ.name()}$tspaces')
+			if field.attrs.len > 0 {
+				f.attributes(field.attrs, field.attrs_pos)
+			}
+		}
+	}
+	if pnm.len > 0 {
+		f.down()
+		f.write('pub:', true)
+		f.up()
+		for field in pnm {
+			f.pos = field.pos
+			nspaces := ' '.repeat(longest_name - field.name.len)
+			tspaces := ' '.repeat(longest_type - field.typ.name().len)
+			f.write('$field.name$nspaces${field.typ.name()}$tspaces')
+			if field.attrs.len > 0 {
+				f.attributes(field.attrs, field.attrs_pos)
+			}
+		}
+	}
+	if pm.len > 0 {
+		f.down()
+		f.write('pub mut:', true)
+		f.up()
+		for field in pm {
+			f.pos = field.pos
+			nspaces := ' '.repeat(longest_name - field.name.len)
+			tspaces := ' '.repeat(longest_type - field.typ.name().len)
+			f.write('$field.name$nspaces${field.typ.name()}$tspaces')
+			if field.attrs.len > 0 {
+				f.attributes(field.attrs, field.attrs_pos)
+			}
+		}
+	}
+
+
+	f.down()
+}
+
+fn (mut f Fmt) sumtype_stmt(stmt ast.SumtypeStmt) {
+	f.pos = stmt.pos
+	mut len := 0
+	if stmt.is_pub {
+		f.write('pub ')
+		len += 4
+	}
+	f.write('type $stmt.name =')
+	len += 7
+	len += stmt.name.len
+	mut str := ''
+	for i, name in stmt.names {
+		str += ' $name '
+		if i < stmt.names.len - 1 {
+			str += '|'
+			if i % max_types_per_line == 0 && i > 0 {
+				str += '\n'
+				str += ' '.repeat(len)
+			}
+		}
+	}
+	f.write(str)
+	f.write('', true)
 }
 
 fn (mut f Fmt) string_expr(expr ast.StringExpr) {

@@ -50,6 +50,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'void'
             })
+            is_array: false
         }
         parameter: []
         attrs_pos: token.Position{
@@ -71,6 +72,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'signed char'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'i16'
@@ -80,6 +82,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'signed short'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'int'
@@ -89,6 +92,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'signed long'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'i64'
@@ -98,6 +102,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'signed long long'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'byte'
@@ -107,6 +112,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'unsigned char'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'u16'
@@ -116,6 +122,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'unsigned short'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'u32'
@@ -125,6 +132,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'unsigned long'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'u64'
@@ -134,6 +142,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'unsigned long long'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'charptr'
@@ -143,6 +152,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'char *'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'voidptr'
@@ -152,6 +162,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'void *'
             })
+            is_array: false
         }, types.Type{
             mod: ''
             name: 'void_'
@@ -161,6 +172,7 @@ ast.File{
             info: types.Info(types.Builtin{
                 cbase: 'void'
             })
+            is_array: false
         }]
         type_idx: {'i8': 0, 'i16': 1, 'int': 2, 'i64': 3, 'byte': 4, 'u16': 5, 'u32': 6, 'u64': 7, 'charptr': 8, 'voidptr': 9, 'void_': 10}
     }
