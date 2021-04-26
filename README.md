@@ -20,6 +20,8 @@ The parser parses the following statements for now:
 - ReturnStmt
 - ConstStmt
 - DeclareStmt
+- StructStmt
+- SubtypeStmt
 
 And the following expressions:
 - StringExpr
